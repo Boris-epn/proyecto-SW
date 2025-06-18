@@ -7,6 +7,7 @@ package vista;
 import static java.time.Clock.system;
 import static java.time.InstantSource.system;
 import vista.informacion_doctor;
+import vista.informacion_paciente;
 /**
  *
  * @author USUARIO
@@ -111,6 +112,13 @@ public class login extends javax.swing.JFrame {
         if (usuario.equals("doctor") && password.equals("doctor")){
             informacion_doctor ventanaDoctor= new informacion_doctor();
             ventanaDoctor.setVisible(true);
+            this.setVisible(false);
+            
+        }
+        
+        if (usuario.equals("paciente") && password.equals("paciente")){
+            informacion_paciente ventanaPaciente= new informacion_paciente();
+            ventanaPaciente.setVisible(true);
             this.setVisible(false);
             
         }

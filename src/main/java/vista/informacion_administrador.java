@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-import vista.guardado_paciente
+import vista.guardado_paciente;
 
 /**
  *
@@ -75,6 +75,11 @@ public class informacion_administrador extends javax.swing.JFrame {
         jLabel8.setText("Alergias");
 
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -205,6 +210,12 @@ public class informacion_administrador extends javax.swing.JFrame {
         this.jtfalergias.setText("");
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        guardado_paciente vistaGuardado = new guardado_paciente();
+        vistaGuardado.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

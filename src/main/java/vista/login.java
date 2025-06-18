@@ -8,6 +8,7 @@ import static java.time.Clock.system;
 import static java.time.InstantSource.system;
 import vista.informacion_doctor;
 import vista.informacion_paciente;
+import vista.informacion_administrador;
 /**
  *
  * @author USUARIO
@@ -122,6 +123,14 @@ public class login extends javax.swing.JFrame {
             this.setVisible(false);
             
         }
+        
+         if (usuario.equals("administrador") && password.equals("administrador")){
+            informacion_administrador vistaAdministrador = new informacion_administrador();
+            vistaAdministrador.setVisible(true);
+            this.setVisible(false);
+            
+        }
+        
         
     }//GEN-LAST:event_jAceptarActionPerformed
 

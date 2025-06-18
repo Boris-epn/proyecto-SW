@@ -122,6 +122,7 @@ public class login extends javax.swing.JFrame {
             this.setVisible(false);
             
         }
+        
     }//GEN-LAST:event_jAceptarActionPerformed
 
     /**

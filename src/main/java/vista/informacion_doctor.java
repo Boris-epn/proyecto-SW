@@ -1,11 +1,15 @@
 package vista;
 
 import java.awt.Image;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import vista.resultados;
 import vista.evolucion;
+import vista.editar_paciente;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -54,6 +58,7 @@ public class informacion_doctor extends javax.swing.JFrame {
         jLabel26 = new javax.swing.JLabel();
         jTextField23 = new javax.swing.JTextField();
         jLabel42 = new javax.swing.JLabel();
+        jbeditar = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jTextField18 = new javax.swing.JTextField();
@@ -64,10 +69,6 @@ public class informacion_doctor extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
         jTextField21 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jTextField22 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -97,6 +98,10 @@ public class informacion_doctor extends javax.swing.JFrame {
         jtfalergias = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
         jbguardar = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jcbbusqueda = new javax.swing.JComboBox<>();
+        jtfbusqueda = new javax.swing.JTextField();
+        jbbuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -160,6 +165,13 @@ public class informacion_doctor extends javax.swing.JFrame {
         jTextField23.setEditable(false);
         jTextField23.setText("Penisilina");
 
+        jbeditar.setText("Editar");
+        jbeditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbeditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -181,22 +193,26 @@ public class informacion_doctor extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6))
-                        .addGap(85, 85, 85)
+                        .addGap(92, 92, 92)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField5)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4)))
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(85, 85, 85)
                         .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(85, 85, 85))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(217, 217, 217)
+                .addComponent(jbeditar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,20 +234,22 @@ public class informacion_doctor extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
                     .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(117, 117, 117)
+                .addGap(57, 57, 57)
+                .addComponent(jbeditar)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel42)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(333, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Información del paciente", jPanel1);
@@ -313,41 +331,10 @@ public class informacion_doctor extends javax.swing.JFrame {
                 .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60)
                 .addComponent(jButton2)
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addContainerGap(275, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Evolución", jPanel6);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula", "Nombre" }));
-
-        jButton3.setText("Buscar");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(102, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(81, 81, 81)
-                .addComponent(jButton3)
-                .addContainerGap(535, Short.MAX_VALUE))
-        );
-
-        jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Antecedentes"));
 
@@ -486,7 +473,19 @@ public class informacion_doctor extends javax.swing.JFrame {
 
         jLabel35.setText("Nombres");
 
+        jtfnombres.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfnombresFocusLost(evt);
+            }
+        });
+
         jLabel36.setText("Apellidos");
+
+        jtfapellidos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfapellidosFocusLost(evt);
+            }
+        });
 
         jLabel37.setText("cédula");
 
@@ -499,6 +498,11 @@ public class informacion_doctor extends javax.swing.JFrame {
         jLabel38.setText("Fecha de nacimiento");
 
         jftffechadenacimiento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        jftffechadenacimiento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jftffechadenacimientoFocusLost(evt);
+            }
+        });
 
         jLabel39.setText("Sexo");
 
@@ -506,7 +510,19 @@ public class informacion_doctor extends javax.swing.JFrame {
 
         jLabel40.setText("Correo");
 
+        jtfcorreo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfcorreoFocusLost(evt);
+            }
+        });
+
         jLabel41.setText("Alergias");
+
+        jtfalergias.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtfalergiasFocusLost(evt);
+            }
+        });
 
         jButton5.setText("Cancelar");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -588,7 +604,7 @@ public class informacion_doctor extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel41)
                     .addComponent(jtfalergias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jbguardar))
@@ -596,6 +612,42 @@ public class informacion_doctor extends javax.swing.JFrame {
         );
 
         jtpinformacionpaciente.addTab("Agregar paciente", jPanel5);
+
+        jcbbusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula", "Nombre" }));
+
+        jbbuscar.setText("Buscar");
+        jbbuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbbuscarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(80, 80, 80)
+                .addComponent(jcbbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbbuscar)
+                    .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(102, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcbbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(81, 81, 81)
+                .addComponent(jbbuscar)
+                .addContainerGap(535, Short.MAX_VALUE))
+        );
+
+        jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -686,6 +738,7 @@ public class informacion_doctor extends javax.swing.JFrame {
             "Error de validación",
             JOptionPane.ERROR_MESSAGE);
         this.jtfcedula.requestFocus();
+        this.jtfcedula.setText("");
         return;
     }
     int provincia = Integer.parseInt(cedula.substring(0, 2));
@@ -696,6 +749,7 @@ public class informacion_doctor extends javax.swing.JFrame {
             "Error de validación",
             JOptionPane.ERROR_MESSAGE);
         this.jtfcedula.requestFocus();
+        this.jtfcedula.setText("");
         return;
     }
     int[] coeficientes = {2, 1, 2, 1, 2, 1, 2, 1, 2};
@@ -713,12 +767,141 @@ public class informacion_doctor extends javax.swing.JFrame {
             "Error de validación",
             JOptionPane.ERROR_MESSAGE);
         this.jtfcedula.requestFocus();
+        this.jtfcedula.setText("");
     }
     }//GEN-LAST:event_jtfcedulaFocusLost
+
+    private void jtfnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombresFocusLost
+       String nombres = this.jtfnombres.getText().trim();
+    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+        JOptionPane.showMessageDialog(this,
+            "Nombre inválido. No debe contener números ni caracteres especiales.",
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
+        this.jtfnombres.requestFocus();
+        this.jtfnombres.setText("");
+    }  
+    }//GEN-LAST:event_jtfnombresFocusLost
+
+    private void jtfapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfapellidosFocusLost
+          String nombres = this.jtfapellidos.getText().trim();
+    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+        JOptionPane.showMessageDialog(this,
+            "Nombre inválido. No debe contener números ni caracteres especiales.",
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
+        this.jtfapellidos.requestFocus();
+        this.jtfapellidos.setText("");
+    } 
+    }//GEN-LAST:event_jtfapellidosFocusLost
+
+    private void jftffechadenacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jftffechadenacimientoFocusLost
+       String fecha = this.jftffechadenacimiento.getText().trim();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    sdf.setLenient(false);
+    try {
+        Date date = sdf.parse(fecha);
+    } catch (ParseException e) {
+        JOptionPane.showMessageDialog(this,
+            "Fecha de nacimiento inválida. Use el formato YYYY-MM-DD.",
+            "Error de validación", JOptionPane.ERROR_MESSAGE);
+        this.jftffechadenacimiento.requestFocus();
+        this.jftffechadenacimiento.setText("");
+    }
+    }//GEN-LAST:event_jftffechadenacimientoFocusLost
+
+    private void jtfcorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcorreoFocusLost
+       String email = this.jtfcorreo.getText().trim();
+    if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        JOptionPane.showMessageDialog(this,
+            "Correo inválido. Por favor ingrese un formato correo@dominio.com.",
+            "Error de validación",
+            JOptionPane.ERROR_MESSAGE);
+        this.jtfcorreo.requestFocus();
+        this.jtfcorreo.setText("");
+    }
+    }//GEN-LAST:event_jtfcorreoFocusLost
+
+    private void jtfalergiasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfalergiasFocusLost
+         String alergias = this.jtfalergias.getText().trim();
+    if (alergias.matches(".*\\d.*")) {
+        JOptionPane.showMessageDialog(this,
+            "Alergias inválidas. No debe contener números.",
+            "Error de validación",
+            JOptionPane.ERROR_MESSAGE);
+        this.jtfalergias.requestFocus();
+        this.jtfalergias.setText("");
+    }
+    }//GEN-LAST:event_jtfalergiasFocusLost
+
+    private void jbbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbbuscarActionPerformed
+     String opcion = this.jcbbusqueda.getSelectedItem().toString();
+
+switch (opcion) {
+    case "Cédula":
+        String ced = this.jtfbusqueda.getText().trim();
+        if (!ced.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this,
+                "Cédula inválida. Debe contener 10 dígitos numéricos.",
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
+            break;
+        }
+        int prov = Integer.parseInt(ced.substring(0, 2));
+        int tercer = ced.charAt(2) - '0';
+        if (prov < 1 || prov > 24 || tercer >= 6) {
+            JOptionPane.showMessageDialog(this,
+                "Cédula inválida. Provincia o tercer dígito no válidos.",
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
+            break;
+        }
+        int[] coef = {2,1,2,1,2,1,2,1,2};
+        int suma = 0;
+        for (int i = 0; i < 9; i++) {
+            int d = ced.charAt(i) - '0';
+            int prod = d * coef[i];
+            suma += (prod > 9) ? prod - 9 : prod;
+        }
+        int dv = (10 - (suma % 10)) % 10;
+        if (dv != (ced.charAt(9) - '0')) {
+            JOptionPane.showMessageDialog(this,
+                "Cédula inválida. Dígito verificador incorrecto.",
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
+        }
+        break;
+
+    case "Nombre":
+        String nom = this.jtfbusqueda.getText().trim();
+        if (!nom.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+            JOptionPane.showMessageDialog(this,
+                "Nombre inválido. No debe contener números ni caracteres especiales.",
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
+        }
+        break;
+        
+    }//GEN-LAST:event_jbbuscarActionPerformed
+
+    }
+    private void jbeditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbeditarActionPerformed
+     vista.editar_paciente editarpaciente = new vista.editar_paciente();
+     editarpaciente.setVisible(true);
+    }//GEN-LAST:event_jbeditarActionPerformed
+
+    
+    
+    /**
+     * @param args the command line arguments
+     */
 
     /**
      * @param args the command line arguments
      */
+
+    /**
+     * @param args the command line arguments
+     */
+
+    /**
+     * @param args the command line arguments
+     */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -743,11 +926,9 @@ public class informacion_doctor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
@@ -785,7 +966,6 @@ public class informacion_doctor extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField21;
-    private javax.swing.JTextField jTextField22;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
     private javax.swing.JTextField jTextField27;
@@ -794,11 +974,15 @@ public class informacion_doctor extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JButton jbbuscar;
+    private javax.swing.JButton jbeditar;
     private javax.swing.JButton jbguardar;
+    private javax.swing.JComboBox<String> jcbbusqueda;
     private javax.swing.JComboBox<String> jcbsexo;
     private javax.swing.JFormattedTextField jftffechadenacimiento;
     private javax.swing.JTextField jtfalergias;
     private javax.swing.JTextField jtfapellidos;
+    private javax.swing.JTextField jtfbusqueda;
     private javax.swing.JTextField jtfcedula;
     private javax.swing.JTextField jtfcorreo;
     private javax.swing.JTextField jtfnombres;

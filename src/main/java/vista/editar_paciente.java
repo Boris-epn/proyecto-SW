@@ -85,6 +85,7 @@ public class editar_paciente extends javax.swing.JFrame {
 
         jLabel3.setText("Cédula");
 
+        jtfcedula.setEditable(false);
         jtfcedula.setText("1726357201");
         jtfcedula.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -99,6 +100,7 @@ public class editar_paciente extends javax.swing.JFrame {
 
         jLabel4.setText("Fecha de nacimiento");
 
+        jftffechadenacimiento.setEditable(false);
         jftffechadenacimiento.setText("10/06/2003");
         jftffechadenacimiento.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -113,7 +115,6 @@ public class editar_paciente extends javax.swing.JFrame {
 
         jLabel5.setText("Sexo");
 
-        jComboBox1.setEditable(true);
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hombre", "Mujer" }));
         jComboBox1.setEnabled(false);
 
@@ -262,137 +263,88 @@ public class editar_paciente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jtfnombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnombresActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfnombresActionPerformed
-
-    private void jtfapellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfapellidosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfapellidosActionPerformed
-
-    private void jtfcedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcedulaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfcedulaActionPerformed
-
-    private void jftffechadenacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jftffechadenacimientoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jftffechadenacimientoActionPerformed
-
-    private void jtfcorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcorreoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfcorreoActionPerformed
+    private void jbcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbcancelarActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jbcancelarActionPerformed
 
     private void jbaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbaceptarActionPerformed
 
         this.setVisible(false);
     }//GEN-LAST:event_jbaceptarActionPerformed
 
-    private void jbcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbcancelarActionPerformed
-        this.setVisible(false);
-    }//GEN-LAST:event_jbcancelarActionPerformed
+    private void jtfalergiasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfalergiasFocusLost
+        String alergias = this.jtfalergias.getText().trim();
+        if (alergias.matches(".*\\d.*")) {
+            JOptionPane.showMessageDialog(this,
+                "Alergias inválidas. No debe contener números.",
+                "Error de validación",
+                JOptionPane.ERROR_MESSAGE);
+            this.jtfalergias.requestFocus();
+            this.jtfalergias.setText("");
+        }
+    }//GEN-LAST:event_jtfalergiasFocusLost
 
-    private void jtfcedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcedulaFocusLost
-         String cedula = this.jtfcedula.getText().trim();
-
-    if (cedula == null || !cedula.matches("\\d{10}")) {
-        JOptionPane.showMessageDialog(this,
-            "Cédula de identidad no válida",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE);
-        this.jtfcedula.requestFocus();
-        this.jtfcedula.setText("");
-        return;
-    }
-    int provincia = Integer.parseInt(cedula.substring(0, 2));
-    int tercerDigito = cedula.charAt(2) - '0';
-    if (provincia < 1 || provincia > 24 || tercerDigito >= 6) {
-        JOptionPane.showMessageDialog(this,
-            "Cédula de identidad no válida",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE);
-        this.jtfcedula.requestFocus();
-        this.jtfcedula.setText("");
-        return;
-    }
-    int[] coeficientes = {2, 1, 2, 1, 2, 1, 2, 1, 2};
-    int suma = 0;
-    for (int i = 0; i < 9; i++) {
-        int digito = cedula.charAt(i) - '0';
-        int producto = digito * coeficientes[i];
-        suma += (producto > 9) ? producto - 9 : producto;
-    }
-    int digitoVerificador = (10 - (suma % 10)) % 10;
-
-    if (digitoVerificador != (cedula.charAt(9) - '0')) {
-        JOptionPane.showMessageDialog(this,
-            "Cédula de identidad no válida",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE);
-        this.jtfcedula.requestFocus();
-        this.jtfcedula.setText("");
-    }
-    }//GEN-LAST:event_jtfcedulaFocusLost
-
-    private void jtfnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombresFocusLost
-        String nombres = this.jtfnombres.getText().trim();
-    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
-        JOptionPane.showMessageDialog(this,
-            "Nombre inválido. No debe contener números ni caracteres especiales.",
-            "Error de validación", JOptionPane.ERROR_MESSAGE);
-        this.jtfnombres.requestFocus();
-        this.jtfnombres.setText("");
-    }  
-    }//GEN-LAST:event_jtfnombresFocusLost
-
-    private void jtfapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfapellidosFocusLost
-        String nombres = this.jtfapellidos.getText().trim();
-    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
-        JOptionPane.showMessageDialog(this,
-            "Nombre inválido. No debe contener números ni caracteres especiales.",
-            "Error de validación", JOptionPane.ERROR_MESSAGE);
-        this.jtfapellidos.requestFocus();
-        this.jtfapellidos.setText("");
-    }
-    }//GEN-LAST:event_jtfapellidosFocusLost
-
-    private void jftffechadenacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jftffechadenacimientoFocusLost
-         String fecha = this.jftffechadenacimiento.getText().trim();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    sdf.setLenient(false);
-    try {
-        Date date = sdf.parse(fecha);
-    } catch (ParseException e) {
-        JOptionPane.showMessageDialog(this,
-            "Fecha de nacimiento inválida. Use el formato YYYY-MM-DD.",
-            "Error de validación", JOptionPane.ERROR_MESSAGE);
-        this.jftffechadenacimiento.requestFocus();
-        this.jftffechadenacimiento.setText("");
-    }
-    }//GEN-LAST:event_jftffechadenacimientoFocusLost
+    private void jtfcorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfcorreoActionPerformed
 
     private void jtfcorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcorreoFocusLost
         String email = this.jtfcorreo.getText().trim();
-    if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-        JOptionPane.showMessageDialog(this,
-            "Correo inválido. Por favor ingrese un formato correo@dominio.com.",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE);
-        this.jtfcorreo.requestFocus();
-        this.jtfcorreo.setText("");
-    }
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            JOptionPane.showMessageDialog(this,
+                "Correo inválido. Por favor ingrese un formato correo@dominio.com.",
+                "Error de validación",
+                JOptionPane.ERROR_MESSAGE);
+            this.jtfcorreo.requestFocus();
+            this.jtfcorreo.setText("");
+        }
     }//GEN-LAST:event_jtfcorreoFocusLost
 
-    private void jtfalergiasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfalergiasFocusLost
-          String alergias = this.jtfalergias.getText().trim();
-    if (alergias.matches(".*\\d.*")) {
-        JOptionPane.showMessageDialog(this,
-            "Alergias inválidas. No debe contener números.",
-            "Error de validación",
-            JOptionPane.ERROR_MESSAGE);
-        this.jtfalergias.requestFocus();
-        this.jtfalergias.setText("");
-    }
-    }//GEN-LAST:event_jtfalergiasFocusLost
+    private void jtfapellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfapellidosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfapellidosActionPerformed
+
+    private void jtfapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfapellidosFocusLost
+        String apellidos = this.jtfapellidos.getText().trim();
+        if (!apellidos.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+") || apellidos == "") {
+            JOptionPane.showMessageDialog(this,
+                "Nombre inválido. No debe contener números ni caracteres especiales.",
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
+            this.jtfapellidos.requestFocus();
+            this.jtfapellidos.setText("");
+        }
+    }//GEN-LAST:event_jtfapellidosFocusLost
+
+    private void jtfnombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfnombresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfnombresActionPerformed
+
+    private void jtfnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombresFocusLost
+        String nombres = this.jtfnombres.getText().trim();
+        if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+") || nombres == "") {
+            JOptionPane.showMessageDialog(this,
+                "Nombre inválido. No debe contener números ni caracteres especiales.",
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
+            this.jtfnombres.requestFocus();
+            this.jtfnombres.setText("");
+        }
+    }//GEN-LAST:event_jtfnombresFocusLost
+
+    private void jftffechadenacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jftffechadenacimientoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jftffechadenacimientoActionPerformed
+
+    private void jftffechadenacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jftffechadenacimientoFocusLost
+        
+    }//GEN-LAST:event_jftffechadenacimientoFocusLost
+
+    private void jtfcedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfcedulaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfcedulaActionPerformed
+
+    private void jtfcedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfcedulaFocusLost
+       
+    }//GEN-LAST:event_jtfcedulaFocusLost
 
     /**
      * @param args the command line arguments

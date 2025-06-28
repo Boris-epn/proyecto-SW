@@ -687,6 +687,7 @@ public class informacion_doctor extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField27ActionPerformed
 
     private void jbguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbguardarActionPerformed
+ 
         this.jtfnombres.setText("");
         this.jtfapellidos.setText("");
         this.jtfcedula.setText("");
@@ -773,7 +774,7 @@ public class informacion_doctor extends javax.swing.JFrame {
 
     private void jtfnombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfnombresFocusLost
        String nombres = this.jtfnombres.getText().trim();
-    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+") || nombres == "") {
         JOptionPane.showMessageDialog(this,
             "Nombre inválido. No debe contener números ni caracteres especiales.",
             "Error de validación", JOptionPane.ERROR_MESSAGE);
@@ -783,8 +784,8 @@ public class informacion_doctor extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfnombresFocusLost
 
     private void jtfapellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfapellidosFocusLost
-          String nombres = this.jtfapellidos.getText().trim();
-    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+          String apellidos = this.jtfapellidos.getText().trim();
+    if (!apellidos.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+") || apellidos == "") {
         JOptionPane.showMessageDialog(this,
             "Nombre inválido. No debe contener números ni caracteres especiales.",
             "Error de validación", JOptionPane.ERROR_MESSAGE);

@@ -318,7 +318,8 @@ public class informacion_paciente extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField8ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        resultados vistaResultados= new resultados();
+        int idCitaSeleccionada=0;
+        resultados vistaResultados= new resultados(idCitaSeleccionada);
         vistaResultados.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -4,10 +4,17 @@
  */
 package vista;
 
+import com.mycompany.prototipo1.ConexionSQLServer;
 import static java.time.Clock.system;
 import static java.time.InstantSource.system;
 import vista.informacion_doctor;
 import vista.informacion_paciente;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 /**
  *
  * @author USUARIO
@@ -107,24 +114,72 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAceptarActionPerformed
-        String usuario = this.jtfusuario.getText();
-        String password = new String(this.jpfcontrasena.getPassword());
-        if (usuario.equals("doctor") && password.equals("doctor")){
-            informacion_doctor ventanaDoctor= new informacion_doctor();
-            ventanaDoctor.setVisible(true);
-            this.setVisible(false);
+        String usuario = this.jtfusuario.getText().trim();
+    char[] passwordChars = jpfcontrasena.getPassword();
+    String contrasena = new String(passwordChars).trim();
+    
+    // Limpiar array de contraseña por seguridad
+    java.util.Arrays.fill(passwordChars, ' ');
+    
+    try (Connection conn = ConexionSQLServer.conectar()) {
+        // Buscar en Pacientes
+        String pacienteQuery = "SELECT cedula, contrasena_paciente FROM Paciente WHERE cedula = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(pacienteQuery)) {
+            stmt.setString(1, usuario);
+            ResultSet rs = stmt.executeQuery();
             
+            if (rs.next()) {
+                String dbPassword = rs.getString("contrasena_paciente");
+                if (dbPassword != null && dbPassword.equals(contrasena)) {
+                    JOptionPane.showMessageDialog(this, "Acceso concedido como paciente");
+                    informacion_paciente paciente = new informacion_paciente();
+                    paciente.setVisible(true);
+                    this.dispose(); // Cerrar ventana de login
+                    return;
+                }
+            }
         }
         
-        if (usuario.equals("paciente") && password.equals("paciente")){
-            informacion_paciente ventanaPaciente= new informacion_paciente();
-            ventanaPaciente.setVisible(true);
-            this.setVisible(false);
+        // Buscar en Doctores
+        String doctorQuery = "SELECT cedula, contrasena_doctor FROM Doctor WHERE cedula = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(doctorQuery)) {
+            stmt.setString(1, usuario);
+            ResultSet rs = stmt.executeQuery();
             
+            if (rs.next()) {
+                String dbPassword = rs.getString("contrasena_doctor");
+                if (dbPassword != null && dbPassword.equals(contrasena)) {
+                    String cedulaDoctor = rs.getString("cedula");
+                    JOptionPane.showMessageDialog(this, "Acceso concedido como doctor");
+                    informacion_doctor doctor = new informacion_doctor(cedulaDoctor);
+                    doctor.setVisible(true);
+                    this.dispose(); // Cerrar ventana de login
+                    return;
+                }
+            }
         }
         
-         
+        // Si no coincide en ninguna tabla
+        JOptionPane.showMessageDialog(this, 
+            "Usuario o contraseña incorrectos", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        this.jtfusuario.setText("");
+        this.jpfcontrasena.setText("");
         
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error: Driver JDBC no encontrado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error de conexión: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }     
         
     }//GEN-LAST:event_jAceptarActionPerformed
 

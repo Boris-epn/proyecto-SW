@@ -1,0 +1,103 @@
+package com.mycompany.prototipo1;
+
+import com.mycompany.prototipo1.ConexionSQLServer;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CitaDAO {
+    public static Map<String, String> obtenerPacienteConCitaMasProxima(String cedulaDoctor) {
+        Map<String, String> datosPaciente = new HashMap<>();
+        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.fecha_nacimiento, p.sexo, p.correo, p.alergias, c.fecha, c.hora " +
+                     "FROM Cita c " +
+                     "INNER JOIN Paciente p ON c.id_paciente = p.cedula " +
+                     "WHERE c.id_doctor = ? " + // cedula del doctor que inició sesión
+                     "AND (c.fecha > CAST(GETDATE() AS DATE) OR (c.fecha = CAST(GETDATE() AS DATE) AND c.hora >= CAST(GETDATE() AS TIME))) " +
+                     "ORDER BY c.fecha ASC, c.hora ASC"; 
+        
+        try (Connection conn = ConexionSQLServer.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, cedulaDoctor);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String fechaNacimiento = "";
+                if (rs.getDate("fecha_nacimiento") != null) {
+                    fechaNacimiento = sdf.format(rs.getDate("fecha_nacimiento"));
+                }
+                
+                datosPaciente.put("cedula", rs.getString("cedula"));
+                datosPaciente.put("nombres", rs.getString("nombres"));
+                datosPaciente.put("apellidos", rs.getString("apellidos"));
+                datosPaciente.put("fecha_nacimiento", fechaNacimiento);
+                datosPaciente.put("sexo", rs.getString("sexo"));
+                datosPaciente.put("correo", rs.getString("correo"));
+                datosPaciente.put("alergias", rs.getString("alergias"));
+                
+                if (rs.getDate("fecha") != null) {
+                    datosPaciente.put("fecha_cita", sdf.format(rs.getDate("fecha")));
+                }
+                if (rs.getTime("hora") != null) {
+                    datosPaciente.put("hora_cita", rs.getTime("hora").toString());
+                }
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error en la consulta SQL: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error: Driver JDBC no encontrado", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        System.out.println("*******************");
+        System.out.println("Datos encontrados: " + datosPaciente); // Mensaje de depuración mejorado
+        return datosPaciente;
+        
+    }
+    // En el archivo CitaDAO.java
+
+public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente) {
+    List<ConsultaPrevia> consultas = new ArrayList<>();
+    
+    // CORRECCIÓN: Se selecciona d.especialidad y se elimina el JOIN a la tabla Tipo.
+    String sql = "SELECT c.id_cita, c.fecha, d.especialidad, d.nombres + ' ' + d.apellidos AS nombre_doctor " +
+                 "FROM Cita c " +
+                 "INNER JOIN Doctor d ON c.id_doctor = d.cedula " +
+                 "WHERE c.id_paciente = ? AND c.fecha < GETDATE() " +
+                 "ORDER BY c.fecha DESC";
+
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setString(1, cedulaPaciente);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            // CORRECCIÓN: Se llama al constructor con los 4 argumentos, incluyendo la especialidad.
+            consultas.add(new ConsultaPrevia(
+                rs.getInt("id_cita"),
+                rs.getDate("fecha"),
+                rs.getString("especialidad"),
+                rs.getString("nombre_doctor")
+            ));
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al consultar consultas previas: " + e.getMessage());
+        e.printStackTrace();
+    }
+    return consultas;
+}
+}

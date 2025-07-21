@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-
+import com.mycompany.prototipo1.ResultadosDAO; // Asegúrate de importar tu DAO
+import java.util.Map;
 
 /**
  *
@@ -12,13 +13,37 @@ package vista;
 public class resultados extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(resultados.class.getName());
+    private int idCita;
 
     /**
      * Creates new form resultados
      */
-    public resultados() {
+    public resultados(int idCita) {
         initComponents();
-        this.setLocationRelativeTo(this);
+        this.idCita = idCita;
+        this.setLocationRelativeTo(null);
+        
+       cargarTodosLosResultados(); // Método que llenará todos los campos
+    }
+    private void cargarTodosLosResultados() {
+        // 1. Cargar evolución (diagnóstico y pronóstico)
+        Map<String, String> evolucion = ResultadosDAO.obtenerEvolucion(this.idCita);
+        // Asumiendo que jTextField1 es para diagnóstico y jTextField3 para pronóstico
+        jTextField1.setText(evolucion.getOrDefault("diagnostico", "")); 
+        // ¡Necesitarás un campo para el pronóstico! Por ahora lo omitimos.
+
+        // 2. Cargar tratamiento
+        String tratamiento = ResultadosDAO.obtenerTratamientos(this.idCita);
+        jTextField2.setText(tratamiento); // jTextField2 es para tratamiento
+
+        // 3. Cargar exámenes (jTable2)
+        jTable2.setModel(ResultadosDAO.obtenerExamenes(this.idCita));
+        
+        // 4. Cargar receta (jTable1)
+        jTable1.setModel(ResultadosDAO.obtenerReceta(this.idCita));
+
+        // 5. Cargar signos vitales (jTable3)
+        jTable3.setModel(ResultadosDAO.obtenerSignosVitales(this.idCita));
     }
 
     /**
@@ -194,9 +219,10 @@ public class resultados extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        int idCitaSeleccionada = 0;
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new resultados().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new resultados(idCitaSeleccionada).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

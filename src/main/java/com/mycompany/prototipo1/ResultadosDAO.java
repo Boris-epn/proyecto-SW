@@ -1,32 +1,36 @@
 package com.mycompany.prototipo1;
 
-
-import com.mycompany.prototipo1.ConexionSQLServer;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class ResultadosDAO {
 
-    // Obtiene diagnóstico y pronóstico de la tabla Evolucion
-    public static Map<String, String> obtenerEvolucion(int idCita) {
-        Map<String, String> evolucion = new HashMap<>();
-        String sql = "SELECT diagnostico, pronostico FROM Evolucion WHERE id_cita = ?";
+    /**
+     * Obtiene el diagnóstico desde la tabla Evolucion.
+     * @param idCita El ID de la cita.
+     * @return Un String con el diagnóstico.
+     */
+    public static String obtenerDiagnostico(int idCita) {
+        String diagnostico = "";
+        String sql = "SELECT diagnostico FROM Cita WHERE id_cita = ?";
         try (Connection conn = ConexionSQLServer.conectar(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, idCita);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                evolucion.put("diagnostico", rs.getString("diagnostico"));
-                evolucion.put("pronostico", rs.getString("pronostico"));
+                diagnostico = rs.getString("diagnostico");
             }
         } catch (Exception e) { e.printStackTrace(); }
-        return evolucion;
+        return diagnostico;
     }
 
-    // Obtiene la descripción del tratamiento
+    /**
+     * Obtiene todas las descripciones de tratamientos para una cita.
+     * @param idCita El ID de la cita.
+     * @return Un String con todos los tratamientos, separados por saltos de línea.
+     */
     public static String obtenerTratamientos(int idCita) {
         StringBuilder tratamientos = new StringBuilder();
         String sql = "SELECT t.descripcion FROM Tratamiento t " +
@@ -42,31 +46,69 @@ public class ResultadosDAO {
         return tratamientos.toString();
     }
 
-    // Obtiene los exámenes. Asume que 'Evaluar' tiene un campo 'resultado'.
+    /**
+     * Obtiene la tabla de exámenes y sus resultados.
+     * @param idCita El ID de la cita.
+     * @return Un DefaultTableModel para la tabla de exámenes.
+     */
     public static DefaultTableModel obtenerExamenes(int idCita) {
         String[] columnas = {"Examen", "Resultado"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0);
-        String sql = "SELECT ex.nombre, ev.resultado " +
-                     "FROM Examen ex " +
+        String sql = "SELECT ex.nombre, ev.resultados FROM Examen ex " +
                      "INNER JOIN Evaluar ev ON ex.id_examen = ev.id_examen " +
                      "WHERE ev.id_cita = ?";
-        // ... el resto del método se mantiene igual
+        try (Connection conn = ConexionSQLServer.conectar(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idCita);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString("nombre"), rs.getString("resultados")});
+            }
+        } catch (Exception e) { e.printStackTrace(); }
         return model;
     }
 
-    // Obtiene la receta. Asume que 'Prescribir' tiene 'id_medicamento', 'dosis', etc.
+    /**
+     * Obtiene la receta médica completa.
+     * @param idCita El ID de la cita.
+     * @return Un DefaultTableModel para la tabla de recetas.
+     */
     public static DefaultTableModel obtenerReceta(int idCita) {
-        String[] columnas = {"Medicamento", "Presentación", "Dosis", "Frecuencia"};
-        DefaultTableModel model = new DefaultTableModel(columnas, 0);
-        String sql = "SELECT m.nombre, m.presentacion, p.dosis, p.frecuencia " +
-                     "FROM Medicamento m " +
-                     "INNER JOIN Prescribir p ON m.id_medicamento = p.id_medicamento " + // Asunción importante
-                     "WHERE p.id_cita = ?";
-        // ... el resto del método se mantiene igual
-        return model;
-    }
+    String[] columnas = {"Medicamento", "Presentación", "Dosis", "Frecuencia"};
+    DefaultTableModel model = new DefaultTableModel(columnas, 0);
     
-    // Obtiene los signos vitales directamente de la tabla Cita
+    // Esta consulta une la tabla Receta para poder filtrar por id_cita.
+    String sql = "SELECT m.nombre, m.presentacion, p.dosis, p.frecuencia " +
+                 "FROM Medicamento m " +
+                 "INNER JOIN Prescribir p ON m.id_medicamento = p.id_medicamento " +
+                 "INNER JOIN Receta r ON p.id_receta = r.id_receta " +
+                 "WHERE r.id_cita = ?";
+
+    try (Connection conn = ConexionSQLServer.conectar(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, idCita);
+        ResultSet rs = pstmt.executeQuery();
+        
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getString("nombre"),
+                rs.getString("presentacion"),
+                rs.getString("dosis"),
+                rs.getString("frecuencia")
+            });
+        }
+    } catch (Exception e) {
+        e.printStackTrace(); 
+        JOptionPane.showMessageDialog(null, "Error al obtener la receta: " + e.getMessage());
+    }
+    return model;
+}
+    
+    /**
+     * Obtiene los signos vitales directamente de la tabla Cita.
+     * @param idCita El ID de la cita.
+     * @return Un DefaultTableModel para la tabla de signos vitales.
+     */
     public static DefaultTableModel obtenerSignosVitales(int idCita) {
         String[] columnas = {"Presión sistólica", "Presión diastólica", "Peso", "Frecuencia Cardíaca"};
         DefaultTableModel model = new DefaultTableModel(columnas, 0);
@@ -76,11 +118,25 @@ public class ResultadosDAO {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 model.addRow(new Object[]{
-                    rs.getString("presion_sistolica"), rs.getString("presion_diastolica"),
-                    rs.getString("peso"), rs.getString("frecuencia_cardiaca")
+                    rs.getString("presion_sistolica"),
+                    rs.getString("presion_diastolica"),
+                    rs.getString("peso"),
+                    rs.getString("frecuencia_cardiaca")
                 });
             }
         } catch (Exception e) { e.printStackTrace(); }
         return model;
     }
+    public static String obtenerResultadosGenerales(int idCita) {
+    StringBuilder resultados = new StringBuilder();
+    String sql = "SELECT resultados FROM Evaluar WHERE id_cita = ? AND resultados IS NOT NULL";
+    try (Connection conn = ConexionSQLServer.conectar(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, idCita);
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            resultados.append(rs.getString("resultados")).append(". ");
+        }
+    } catch (Exception e) { e.printStackTrace(); }
+    return resultados.toString();
+}
 }

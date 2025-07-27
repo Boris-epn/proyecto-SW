@@ -54,41 +54,38 @@ public class informacion_doctor extends javax.swing.JFrame {
         cargarDatosDelPaciente();
         
     }
-     private void cargarDatosDelPaciente() {
-        // 1. Obtener los datos básicos de la próxima cita (UNA SOLA LLAMADA A BD)
-        Map<String, String> datosPaciente = CitaDAO.obtenerPacienteConCitaMasProxima(cedulaDoctor);
-        
-        if (datosPaciente != null && !datosPaciente.isEmpty()) {
-            // Guardamos la cédula del paciente para usarla en otras consultas
-            this.cedulaPaciente = datosPaciente.get("cedula");
+    private void cargarDatosDelPaciente() {
+    Map<String, String> datos = CitaDAO.obtenerPacienteConCitaMasProxima(cedulaDoctor);
+    
+    if (datos != null && !datos.isEmpty()) {
+        this.cedulaPaciente = datos.get("cedula");
 
-            // 2. Llenar los campos de texto del panel principal
-            jTFNombres.setText(datosPaciente.getOrDefault("nombres", ""));
-            jTFApellidos.setText(datosPaciente.getOrDefault("apellidos", ""));
-            jTFCedula.setText(this.cedulaPaciente);
-            jTFFechaNacimiento.setText(datosPaciente.getOrDefault("fecha_nacimiento", ""));
-            jTFSexo.setText(datosPaciente.getOrDefault("sexo", ""));
-            jTFCorreo.setText(datosPaciente.getOrDefault("correo", ""));
-            jTFAlergias.setText(datosPaciente.getOrDefault("alergias", ""));
+        // --- Panel de Información del paciente ---
+        jTFNombres.setText(datos.getOrDefault("nombres", ""));
+        jTFApellidos.setText(datos.getOrDefault("apellidos", ""));
+        this.jTFCedula.setText(datos.getOrDefault("cedula", ""));
+        this.jTFFechaNacimiento.setText(datos.getOrDefault("fecha_nacimiento", ""));
+        this.jTFSexo.setText(datos.getOrDefault("sexo", ""));
+        this.jTFCorreo.setText(datos.getOrDefault("correo", ""));
+        this.jtfalergias.setText(datos.getOrDefault("alergias",""));
+        // ... (resto de campos de información del paciente) ...
 
-            // 3. Cargar datos secundarios que dependen de la cédula del paciente
-            cargarAntecedentes();
-            cargarConsultasPrevias();
+        // --- Panel de Evolución ---
+        // Asumiendo que tus campos de texto se llaman así:
+        jTFEvolucion.setText(datos.getOrDefault("motivo", "")); // Campo "Evolución"
+        jTFDiagnostico.setText(datos.getOrDefault("diagnostico", "")); // Campo "Diagnóstico"
+        jTFPronostico.setText(datos.getOrDefault("pronostico", "")); // Campo "Pronóstico"
+        jTFTratamiento.setText(datos.getOrDefault("tratamientos", "")); // Campo "Tratamiento"
 
-        } else {
-            limpiarCamposPaciente();
-            limpiarTablaAntecedentes();
-            if (jPanelConsultasContainer != null) {
-                jPanelConsultasContainer.removeAll(); // Limpiar panel de consultas previas
-                jPanelConsultasContainer.revalidate();
-                jPanelConsultasContainer.repaint();
-            }
-            JOptionPane.showMessageDialog(this,
-                "No tiene citas programadas para hoy o días futuros",
-                "Información",
-                JOptionPane.INFORMATION_MESSAGE);
-        }
+        // --- Carga de datos secundarios ---
+        cargarAntecedentes();
+        cargarConsultasPrevias();
+
+    } else {
+        // ... (código para limpiar los campos) ...
+        limpiarCamposPaciente(); // Llama al método de limpieza
     }
+}
 
     // Los métodos cargarAntecedentes(), cargarConsultasPrevias(), limpiar... 
     // y el resto de la clase se mantienen como estaban, pero ahora son llamados
@@ -244,13 +241,13 @@ private void limpiarTablaAntecedentes() {
         jTFSexo = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        jTextField18 = new javax.swing.JTextField();
+        jTFEvolucion = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
-        jTextField19 = new javax.swing.JTextField();
+        jTFDiagnostico = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
-        jTextField20 = new javax.swing.JTextField();
+        jTFPronostico = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
-        jTextField21 = new javax.swing.JTextField();
+        jTFTratamiento = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -435,23 +432,23 @@ private void limpiarTablaAntecedentes() {
 
         jLabel22.setText("Evolución");
 
-        jTextField18.setEditable(false);
-        jTextField18.setText("Descripción de evolución");
+        jTFEvolucion.setEditable(false);
+        jTFEvolucion.setText("Descripción de evolución");
 
         jLabel23.setText("Diagnóstico");
 
-        jTextField19.setEditable(false);
-        jTextField19.setText("Descripción de diagnóstico");
+        jTFDiagnostico.setEditable(false);
+        jTFDiagnostico.setText("Descripción de diagnóstico");
 
         jLabel24.setText("Pronóstico");
 
-        jTextField20.setEditable(false);
-        jTextField20.setText("Descripción de pronóstico");
+        jTFPronostico.setEditable(false);
+        jTFPronostico.setText("Descripción de pronóstico");
 
         jLabel25.setText("Tratamiento");
 
-        jTextField21.setEditable(false);
-        jTextField21.setText("Descripción de tratamiento");
+        jTFTratamiento.setEditable(false);
+        jTFTratamiento.setText("Descripción de tratamiento");
 
         jButton2.setText("Agregar evolución");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -469,8 +466,8 @@ private void limpiarTablaAntecedentes() {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField18)
+                            .addComponent(jTFDiagnostico, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTFEvolucion)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -480,8 +477,8 @@ private void limpiarTablaAntecedentes() {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField20)
-                            .addComponent(jTextField21, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                            .addComponent(jTFPronostico)
+                            .addComponent(jTFTratamiento, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
                             .addComponent(jLabel25))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
@@ -495,19 +492,19 @@ private void limpiarTablaAntecedentes() {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFEvolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel23)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel24)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFPronostico, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60)
                 .addComponent(jButton2)
                 .addContainerGap(275, Short.MAX_VALUE))
@@ -1068,14 +1065,14 @@ switch (opcion) {
     private javax.swing.JTextField jTFApellidos;
     private javax.swing.JTextField jTFCedula;
     private javax.swing.JTextField jTFCorreo;
+    private javax.swing.JTextField jTFDiagnostico;
+    private javax.swing.JTextField jTFEvolucion;
     private javax.swing.JTextField jTFFechaNacimiento;
     private javax.swing.JTextField jTFNombres;
+    private javax.swing.JTextField jTFPronostico;
     private javax.swing.JTextField jTFSexo;
+    private javax.swing.JTextField jTFTratamiento;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField20;
-    private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField24;
     private javax.swing.JButton jbbuscar;
     private javax.swing.JButton jbeditar;

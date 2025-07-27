@@ -5,6 +5,9 @@
 package vista;
 import com.mycompany.prototipo1.ResultadosDAO; // Asegúrate de importar tu DAO
 import java.util.Map;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -19,32 +22,63 @@ public class resultados extends javax.swing.JFrame {
      * Creates new form resultados
      */
     public resultados(int idCita) {
-        initComponents();
-        this.idCita = idCita;
-        this.setLocationRelativeTo(null);
-        
-       cargarTodosLosResultados(); // Método que llenará todos los campos
-    }
-    private void cargarTodosLosResultados() {
-        // 1. Cargar evolución (diagnóstico y pronóstico)
-        Map<String, String> evolucion = ResultadosDAO.obtenerEvolucion(this.idCita);
-        // Asumiendo que jTextField1 es para diagnóstico y jTextField3 para pronóstico
-        jTextField1.setText(evolucion.getOrDefault("diagnostico", "")); 
-        // ¡Necesitarás un campo para el pronóstico! Por ahora lo omitimos.
+    initComponents();
+    this.jTAdiagnostico.enableInputMethods(false);
+    this.idCita = idCita;
+    this.setLocationRelativeTo(null);
+    
+    // Carga los datos después de que la UI esté lista
+    javax.swing.SwingUtilities.invokeLater(() -> {
+        cargarTodosLosResultados();
+    });
+}
+private void cargarTodosLosResultados() {
+    
+    
+    // --- Cargar Campos de Texto ---
+    
+    // 1. Cargar Diagnóstico
+    String diagnostico = ResultadosDAO.obtenerDiagnostico(this.idCita);
+    this.jTAdiagnostico.setText(diagnostico);
+    this.jTAdiagnostico.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
+   SwingUtilities.invokeLater(() -> {
+    // Primero coloca el caret al inicio del texto
+    jTAdiagnostico.setCaretPosition(0);
+    
+    // Luego ajusta el scroll horizontal a la posición mínima (izquierda)
+    JScrollBar horizontal = jScrollPane4.getHorizontalScrollBar();
+    horizontal.setValue(horizontal.getMinimum());
+    
+    // Fuerza una actualización de la UI si es necesario
+    jTAdiagnostico.revalidate();
+    jTAdiagnostico.repaint();
+});
 
-        // 2. Cargar tratamiento
-        String tratamiento = ResultadosDAO.obtenerTratamientos(this.idCita);
-        jTextField2.setText(tratamiento); // jTextField2 es para tratamiento
+    // 2. Cargar Tratamiento
+    String tratamientos = ResultadosDAO.obtenerTratamientos(this.idCita);
+    this.jTFTraramiento.setText(tratamientos); // Se usa 'jTFTraramiento' como en tu captura
+    System.out.println(tratamientos);
 
-        // 3. Cargar exámenes (jTable2)
-        jTable2.setModel(ResultadosDAO.obtenerExamenes(this.idCita));
-        
-        // 4. Cargar receta (jTable1)
-        jTable1.setModel(ResultadosDAO.obtenerReceta(this.idCita));
+    // 3. Cargar el campo de texto "Resultados"
+    String resultadosGenerales = ResultadosDAO.obtenerResultadosGenerales(this.idCita);
+    this.jTFResultados.setText(resultadosGenerales);
+    System.out.println(resultadosGenerales);
 
-        // 5. Cargar signos vitales (jTable3)
-        jTable3.setModel(ResultadosDAO.obtenerSignosVitales(this.idCita));
-    }
+
+    // --- Cargar Tablas ---
+
+    // 4. Cargar la tabla de exámenes realizados
+    this.jTExamenes.setModel(ResultadosDAO.obtenerExamenes(this.idCita));
+    
+    // 5. Cargar la tabla de la receta enviada
+    this.jTReceta.setModel(ResultadosDAO.obtenerReceta(this.idCita));
+
+    // 6. Cargar la tabla de signos vitales
+    this.jTSignos.setModel(ResultadosDAO.obtenerSignosVitales(this.idCita));
+}
+
+   
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,34 +89,30 @@ public class resultados extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        jTFTraramiento = new javax.swing.JTextField();
+        jTFResultados = new javax.swing.JTextField();
         jbregresar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTExamenes = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTReceta = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTSignos = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTAdiagnostico = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setEditable(false);
-        jTextField1.setText("Descripción del diagnóstico");
-        jTextField1.setToolTipText("");
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder("Diagnóstico"));
+        jTFTraramiento.setEditable(false);
+        jTFTraramiento.setText("Descripción del tratamiento");
+        jTFTraramiento.setBorder(javax.swing.BorderFactory.createTitledBorder("Tratamiento"));
 
-        jTextField2.setEditable(false);
-        jTextField2.setText("Descripción del tratamiento");
-        jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tratamiento"));
-
-        jTextField3.setEditable(false);
-        jTextField3.setText("Descripción de resultados");
-        jTextField3.setBorder(javax.swing.BorderFactory.createTitledBorder("Resultados"));
+        jTFResultados.setEditable(false);
+        jTFResultados.setText("Descripción de resultados");
+        jTFResultados.setBorder(javax.swing.BorderFactory.createTitledBorder("Resultados"));
 
         jbregresar.setText("Regresar");
         jbregresar.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +121,7 @@ public class resultados extends javax.swing.JFrame {
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTExamenes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Dermatoscopia", "Benigno"},
                 {null, null}
@@ -100,9 +130,9 @@ public class resultados extends javax.swing.JFrame {
                 "Examen", "Resultado"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(jTExamenes);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTReceta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Paracetamol", " 500 gr", "8 horas", "2 semanas", "Pastilla", "16/06/2025"},
                 {null, null, null, null, null, null},
@@ -113,7 +143,7 @@ public class resultados extends javax.swing.JFrame {
                 "Medicamento", "Dosis", "Frecuencia", "Durante", "Presentación", "Fecha de inicio"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTReceta);
 
         jLabel1.setText("Receta enviada");
 
@@ -121,7 +151,7 @@ public class resultados extends javax.swing.JFrame {
 
         jLabel3.setText("Signos vitales");
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jTSignos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -132,62 +162,75 @@ public class resultados extends javax.swing.JFrame {
                 "Presión sistólica", "Presión diastólica", "Peso", "Estatura", "F.C", "Oxigenación"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(jTSignos);
+
+        jTAdiagnostico.setEditable(false);
+        jTAdiagnostico.setColumns(20);
+        jTAdiagnostico.setRows(5);
+        jTAdiagnostico.setTabSize(30);
+        jTAdiagnostico.setAlignmentX(0.0F);
+        jTAdiagnostico.setBorder(javax.swing.BorderFactory.createTitledBorder("Diagnóstico"));
+        jTAdiagnostico.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTAdiagnostico.setDragEnabled(true);
+        jTAdiagnostico.setRequestFocusEnabled(false);
+        jScrollPane4.setViewportView(jTAdiagnostico);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jbregresar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 597, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2)))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(88, 88, 88)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jbregresar)
+                .addContainerGap(1181, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTFResultados, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTFTraramiento, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE))
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(28, 28, 28)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
-                .addGap(115, 115, 115)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFTraramiento, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(jbregresar)
                 .addGap(19, 19, 19))
         );
@@ -232,12 +275,13 @@ public class resultados extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextArea jTAdiagnostico;
+    private javax.swing.JTable jTExamenes;
+    private javax.swing.JTextField jTFResultados;
+    private javax.swing.JTextField jTFTraramiento;
+    private javax.swing.JTable jTReceta;
+    private javax.swing.JTable jTSignos;
     private javax.swing.JButton jbregresar;
     // End of variables declaration//GEN-END:variables
 }

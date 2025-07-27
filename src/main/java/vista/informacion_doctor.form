@@ -283,8 +283,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTextField19" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="jTextField18" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jTFDiagnostico" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jTFEvolucion" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel24" min="-2" pref="76" max="-2" attributes="0"/>
@@ -298,8 +298,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jTextField20" max="32767" attributes="0"/>
-                                  <Component id="jTextField21" alignment="0" pref="460" max="32767" attributes="0"/>
+                                  <Component id="jTFPronostico" max="32767" attributes="0"/>
+                                  <Component id="jTFTratamiento" alignment="0" pref="460" max="32767" attributes="0"/>
                                   <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -319,19 +319,19 @@
                       <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                       <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jTextField18" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="jTFEvolucion" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jTextField19" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="jTFDiagnostico" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jTextField20" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jTFPronostico" min="-2" pref="32" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jLabel25" min="-2" pref="16" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jTextField21" min="-2" pref="39" max="-2" attributes="0"/>
+                      <Component id="jTFTratamiento" min="-2" pref="39" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="275" max="32767" attributes="0"/>
@@ -345,7 +345,7 @@
                 <Property name="text" type="java.lang.String" value="Evoluci&#xf3;n"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField18">
+            <Component class="javax.swing.JTextField" name="jTFEvolucion">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="text" type="java.lang.String" value="Descripci&#xf3;n de evoluci&#xf3;n"/>
@@ -356,7 +356,7 @@
                 <Property name="text" type="java.lang.String" value="Diagn&#xf3;stico"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField19">
+            <Component class="javax.swing.JTextField" name="jTFDiagnostico">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="text" type="java.lang.String" value="Descripci&#xf3;n de diagn&#xf3;stico"/>
@@ -367,7 +367,7 @@
                 <Property name="text" type="java.lang.String" value="Pron&#xf3;stico"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField20">
+            <Component class="javax.swing.JTextField" name="jTFPronostico">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="text" type="java.lang.String" value="Descripci&#xf3;n de pron&#xf3;stico"/>
@@ -378,7 +378,7 @@
                 <Property name="text" type="java.lang.String" value="Tratamiento"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField21">
+            <Component class="javax.swing.JTextField" name="jTFTratamiento">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="text" type="java.lang.String" value="Descripci&#xf3;n de tratamiento"/>

@@ -100,4 +100,71 @@ public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente
     }
     return consultas;
 }
+public static List<Map<String, String>> obtenerEvolucion(String cedulaPaciente) {
+    List<Map<String, String>> citas = new ArrayList<>();
+    
+    String sql = "SELECT " +
+                 "c.fecha, " +
+                 "c.hora, " +
+                 "d.nombres + ' ' + d.apellidos AS nombre_doctor, " +
+                 "d.especialidad, " +
+                 "c.diagnostico, " +  // Nuevo campo diagnóstico
+                 "e.pronostico " +     // Pronóstico de la evolución
+                 "FROM Cita c " +
+                 "INNER JOIN Doctor d ON c.id_doctor = d.cedula " +
+                 "LEFT JOIN Evolucion e ON c.id_cita = e.id_cita " +
+                 "WHERE c.id_paciente = ? " +
+                 "AND c.fecha < CAST(GETDATE() AS DATE) " +
+                 "ORDER BY c.fecha DESC, c.hora DESC";
+    
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, cedulaPaciente);
+        ResultSet rs = pstmt.executeQuery();
+        
+        SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");
+        
+        while (rs.next()) {
+            Map<String, String> cita = new HashMap<>();
+            
+            // Formatear fecha y hora
+            if (rs.getDate("fecha") != null) {
+                cita.put("fecha", sdfFecha.format(rs.getDate("fecha")));
+            }
+            if (rs.getTime("hora") != null) {
+                cita.put("hora", sdfHora.format(rs.getTime("hora")));
+            }
+            
+            // Datos del doctor y evolución
+            cita.put("doctor", rs.getString("nombre_doctor"));
+            cita.put("especialidad", rs.getString("especialidad"));
+            cita.put("diagnostico", rs.getString("diagnostico")); // Nuevo campo
+            cita.put("pronostico", rs.getString("pronostico"));
+            
+            citas.add(cita);
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al obtener evolución: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error: Driver JDBC no encontrado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    System.out.println("aaaaaaaaaaaaaaaaaa");
+    System.out.println(citas);
+    return citas;
+}
+
+
+
+
 }

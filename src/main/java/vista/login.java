@@ -113,6 +113,7 @@ public class login extends javax.swing.JFrame {
        System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    
     private void jAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAceptarActionPerformed
         String usuario = this.jtfusuario.getText().trim();
     char[] passwordChars = jpfcontrasena.getPassword();

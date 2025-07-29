@@ -15,6 +15,7 @@ import vista.editar_paciente;
 import com.mycompany.prototipo1.AntecedentesDAO;
 import javax.swing.table.DefaultTableModel;
 import com.mycompany.prototipo1.CitaDAO;
+import com.mycompany.prototipo1.ConexionSQLServer;
 import com.mycompany.prototipo1.ConsultaPrevia;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,6 +27,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
 import javax.swing.table.TableColumnModel;
@@ -46,6 +50,8 @@ public class informacion_doctor extends javax.swing.JFrame {
     /**
      * Creates new form informaciion_doctor
      */
+   
+
     public informacion_doctor(String cedulaDoctor) {
         initComponents();
         this.setLocationRelativeTo(this);
@@ -58,7 +64,7 @@ public class informacion_doctor extends javax.swing.JFrame {
         }
         cargarDatosDelPaciente();
         cargarEvolucion();
-        
+        configurarValidaciones();
     }
     
     private void cargarEvolucion() {
@@ -116,11 +122,26 @@ public class informacion_doctor extends javax.swing.JFrame {
         // --- Panel de Información del paciente ---
         jTFNombres.setText(datos.getOrDefault("nombres", ""));
         jTFApellidos.setText(datos.getOrDefault("apellidos", ""));
+        this.jTFEdad.setText(datos.getOrDefault("edad", ""));
         this.jTFCedula.setText(datos.getOrDefault("cedula", ""));
         this.jTFFechaNacimiento.setText(datos.getOrDefault("fecha_nacimiento", ""));
-        this.jTFSexo.setText(datos.getOrDefault("sexo", ""));
+        this.jTFGenero.setText(datos.getOrDefault("sexo", ""));
         this.jTFCorreo.setText(datos.getOrDefault("correo", ""));
         this.jtfalergias.setText(datos.getOrDefault("alergias",""));
+        this.jTFTelefono.setText(datos.getOrDefault("telefono", ""));
+        if(datos.get("estado_civil") == ""){
+            System.out.println(" no se ha escogido estado civil");
+        }else if(datos.get("estado_civil")=="Casado/a"){
+            this.jCBEstadoCivil.setSelectedIndex(0);
+        
+        }else if(datos.get("estado_civil")== "Divorciado/a"){
+            this.jCBEstadoCivil.setSelectedIndex(1);
+        }else if(datos.get("estado_civil")== "Viudo/a"){
+            this.jCBEstadoCivil.setSelectedIndex(2);
+        }else if(datos.get("estado_civil")== "Soltero/a"){
+            this.jCBEstadoCivil.setSelectedIndex(3);
+        }
+       
         // ... (resto de campos de información del paciente) ...
 
         // --- Panel de Evolución ---
@@ -151,9 +172,23 @@ public class informacion_doctor extends javax.swing.JFrame {
             jTFApellidos.setText(datosPaciente.getOrDefault("apellidos", ""));
             jTFCedula.setText(datosPaciente.getOrDefault("cedula", ""));
             jTFFechaNacimiento.setText(datosPaciente.getOrDefault("fecha_nacimiento", ""));
-            jTFSexo.setText(datosPaciente.getOrDefault("sexo", ""));
+            jTFGenero.setText(datosPaciente.getOrDefault("sexo", ""));
             jTFCorreo.setText(datosPaciente.getOrDefault("correo", ""));
-            jTFAlergias.setText(datosPaciente.getOrDefault("alergias", ""));
+            this.jTFEdad.setText(datosPaciente.getOrDefault("edad", ""));
+            this.jTFTelefono.setText(datosPaciente.getOrDefault("telefono", ""));
+        if(datosPaciente.get("estado_civil") == ""){
+            System.out.println(" no se ha escogido estado civil");
+        }else if(datosPaciente.get("estado_civil")=="Casado/a"){
+            this.jCBEstadoCivil.setSelectedIndex(0);
+        
+        }else if(datosPaciente.get("estado_civil")== "Divorciado/a"){
+            this.jCBEstadoCivil.setSelectedIndex(1);
+        }else if(datosPaciente.get("estado_civil")== "Viudo/a"){
+            this.jCBEstadoCivil.setSelectedIndex(2);
+        }else if(datosPaciente.get("estado_civil")== "Soltero/a"){
+            this.jCBEstadoCivil.setSelectedIndex(3);
+        }
+       
             cargarAntecedentes();
         } else {
             limpiarCamposPaciente();
@@ -170,9 +205,9 @@ public class informacion_doctor extends javax.swing.JFrame {
         jTFApellidos.setText("");
         jTFCedula.setText("");
         jTFFechaNacimiento.setText("");
-        jTFSexo.setText("");
+        jTFGenero.setText("");
         jTFCorreo.setText("");
-        jTFAlergias.setText("");
+        this.jTFEdad.setText("");
     }
     private void cargarAntecedentes() {
     if (this.cedulaPaciente == null || this.cedulaPaciente.isEmpty()) {
@@ -274,23 +309,6 @@ private void limpiarTablaAntecedentes() {
 
         jTextField24 = new javax.swing.JTextField();
         jtpinformacionpaciente = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTFNombres = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTFApellidos = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTFCedula = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTFFechaNacimiento = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTFCorreo = new javax.swing.JTextField();
-        jLabel26 = new javax.swing.JLabel();
-        jTFAlergias = new javax.swing.JTextField();
-        jLabel42 = new javax.swing.JLabel();
-        jbeditar = new javax.swing.JButton();
-        jTFSexo = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -323,145 +341,30 @@ private void limpiarTablaAntecedentes() {
         jcbbusqueda = new javax.swing.JComboBox<>();
         jtfbusqueda = new javax.swing.JTextField();
         jbbuscar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jTFNombres = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jTFApellidos = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTFCedula = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jTFFechaNacimiento = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTFCorreo = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        jbeditar = new javax.swing.JButton();
+        jTFGenero = new javax.swing.JTextField();
+        jTFEdad = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jCBEstadoCivil = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        jTFTelefono = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("Nombres");
-
-        jTFNombres.setEditable(false);
-        jTFNombres.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFNombresActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Apellidos");
-
-        jTFApellidos.setEditable(false);
-        jTFApellidos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFApellidosActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Cédula");
-
-        jTFCedula.setEditable(false);
-        jTFCedula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFCedulaActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Fecha de nacimiento");
-
-        jTFFechaNacimiento.setEditable(false);
-        jTFFechaNacimiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFFechaNacimientoActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Sexo");
-
-        jLabel6.setText("Correo");
-
-        jTFCorreo.setEditable(false);
-        jTFCorreo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFCorreoActionPerformed(evt);
-            }
-        });
-
-        jLabel26.setText("Alergias");
-
-        jTFAlergias.setEditable(false);
-
-        jbeditar.setText("Editar");
-        jbeditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbeditarActionPerformed(evt);
-            }
-        });
-
-        jTFSexo.setEditable(false);
-        jTFSexo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFSexoActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbeditar))
-                            .addComponent(jTFNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jTFFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jLabel4))
-                .addGap(213, 213, 213))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTFNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTFFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTFSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(jTFAlergias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(120, 120, 120)
-                .addComponent(jbeditar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel42)
-                .addContainerGap(321, Short.MAX_VALUE))
-        );
-
-        jtpinformacionpaciente.addTab("Información del paciente", jPanel1);
 
         jPanel6.setAutoscrolls(true);
 
@@ -784,6 +687,205 @@ private void limpiarTablaAntecedentes() {
 
         jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
 
+        jLabel1.setText("Nombres");
+
+        jTFNombres.setEditable(false);
+        jTFNombres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFNombresActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Apellidos");
+
+        jTFApellidos.setEditable(false);
+        jTFApellidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFApellidosActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Cédula");
+
+        jTFCedula.setEditable(false);
+        jTFCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFCedulaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Fecha de nacimiento");
+
+        jTFFechaNacimiento.setEditable(false);
+        jTFFechaNacimiento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTFFechaNacimientoFocusLost(evt);
+            }
+        });
+        jTFFechaNacimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFFechaNacimientoActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Género");
+
+        jLabel6.setText("Correo electrónico");
+
+        jTFCorreo.setEditable(false);
+        jTFCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTFCorreoFocusLost(evt);
+            }
+        });
+        jTFCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFCorreoActionPerformed(evt);
+            }
+        });
+
+        jLabel26.setText("Edad");
+
+        jbeditar.setText("Editar");
+        jbeditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbeditarActionPerformed(evt);
+            }
+        });
+
+        jTFGenero.setEditable(false);
+        jTFGenero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFGeneroActionPerformed(evt);
+            }
+        });
+
+        jTFEdad.setEditable(false);
+        jTFEdad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTFEdadFocusLost(evt);
+            }
+        });
+        jTFEdad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFEdadActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Persona de contacto");
+
+        jLabel27.setText("Estado civil");
+
+        jCBEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casado/a", "Divorciado/a", "Viduo/a", "Soltero/a" }));
+
+        jLabel8.setText("Teléfono");
+
+        jTFTelefono.setEditable(false);
+        jTFTelefono.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTFTelefonoFocusLost(evt);
+            }
+        });
+        jTFTelefono.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFTelefonoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(322, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(46, 46, 46)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTFNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                .addComponent(jTFApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                .addComponent(jTFFechaNacimiento)
+                                .addComponent(jTFCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                .addComponent(jTFGenero)
+                                .addComponent(jTFCorreo)
+                                .addComponent(jTFEdad)
+                                .addComponent(jCBEstadoCivil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTFTelefono)))
+                        .addComponent(jLabel4)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jbeditar)
+                            .addGap(168, 168, 168)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(213, 213, 213))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTFNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTFFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTFGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jTFCorreo)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(jTFEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(jCBEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTFTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addComponent(jbeditar)
+                .addGap(33, 33, 33)
+                .addComponent(jLabel42)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addGap(293, 293, 293))
+        );
+
+        jtpinformacionpaciente.addTab("Información del paciente", jPanel1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -994,20 +1096,389 @@ switch (opcion) {
 
     }
     private void jbeditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbeditarActionPerformed
-     vista.editar_paciente editarpaciente = new vista.editar_paciente();
-     editarpaciente.setVisible(true);
+    // vista.editar_paciente editarpaciente = new vista.editar_paciente();
+     //editarpaciente.setVisible(true);
+    if (this.jbeditar.getText().equals("Finalizar")) {
+        // Validar todos los campos antes de finalizar
+        
+        if (validarTodosLosCampos()) {
+            ActualizarTelefono();
+            actualizarEstadoCivil();
+            this.jTFFechaNacimiento.setEditable(false);
+            this.jTFGenero.setEditable(false);
+            this.jTFCorreo.setEditable(false);
+            this.jTFEdad.setEditable(false);
+            this.jbeditar.setText("Editar");
+            this.jCBEstadoCivil.setEditable(false);
+            JOptionPane.showMessageDialog(this, "Cambios guardados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        }
+    } else {
+        if(this.jTFFechaNacimiento.getText().equals("")){
+                System.out.println("No hay fecha");
+                this.jTFFechaNacimiento.setEditable(true);
+            }else{
+            this.jTFFechaNacimiento.setEditable(false);
+            //this.jTFFechaNacimiento.setEnabled(false);
+            System.out.println("else");
+        
+        }
+        //this.jTFNombres.setEnabled(false);
+        //this.jTFApellidos.setEnabled(false);
+       // this.jTFCedula.setEnabled(false);
+       this.jCBEstadoCivil.setEditable(true);
+       this.jTFTelefono.setEditable(true);
+        this.jTFGenero.setEditable(true);
+        this.jTFCorreo.setEditable(true);
+        this.jTFEdad.setEditable(true);
+        JOptionPane.showMessageDialog(this, "Editar con precoaución","Editar",JOptionPane.INFORMATION_MESSAGE);
+        this.jbeditar.setText("Finalizar");
+    }
     }//GEN-LAST:event_jbeditarActionPerformed
 
-    private void jTFSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFSexoActionPerformed
+    private void jTFGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFGeneroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTFSexoActionPerformed
+    }//GEN-LAST:event_jTFGeneroActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         evolucion vistaEvolucion = new evolucion();
         vistaEvolucion.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jTFEdadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFEdadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFEdadActionPerformed
+private void configurarValidaciones() {
+    // Configurar validación para todos los campos editables
+    configurarValidacionFecha();
+    configurarValidacionNombres();
+    configurarValidacionApellidos();
+    configurarValidacionSexo();
+    configurarValidacionCorreo();
+    configurarValidacionEdad();
+}
+private boolean validarTodosLosCampos() {
+    boolean todosValidos = true;
+    StringBuilder errores = new StringBuilder();
     
+    // Validar fecha
+    String fecha = jTFFechaNacimiento.getText().trim();
+    if (!validarFechaSQL(fecha)) {
+        errores.append("- Fecha de nacimiento inválida\n");
+        this.jTFFechaNacimiento.setText("");
+        todosValidos = false;
+    }
+    String telefono = this.jTFTelefono.getText().trim();
+    if (!validarTelefono(telefono)) {
+        errores.append("- Telefono inválida\n");
+        this.jTFTelefono.setText("");
+        todosValidos = false;
+    }
+    
+    // Validar género
+    String genero = jTFGenero.getText().trim();
+    if (!validarSexo(genero)) {
+        errores.append("- Género inválido\n");
+        this.jTFGenero.setText("");
+        todosValidos = false;
+    }
+    
+    // Validar correo
+    String correo = jTFCorreo.getText().trim();
+    if (!validarCorreo(correo)) {
+        errores.append("- Correo electrónico inválido\n");
+        this.jTFCorreo.setText("");
+        todosValidos = false;
+    }
+    
+    // Validar edad
+    String edad = jTFEdad.getText().trim();
+    if (!validarEdad(edad)) {
+        errores.append("- Edad inválida\n");
+        this.jTFEdad.setText("");
+        todosValidos = false;
+    }
+    
+    if (!todosValidos) {
+        JOptionPane.showMessageDialog(this, 
+            "Por favor corrija los siguientes errores:\n" + errores.toString(), 
+            "Errores de validación", 
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
+    return todosValidos;
+}
+private void configurarValidacionEdad() {
+    jTFEdad.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            String edadStr = jTFEdad.getText().trim();
+            if (!edadStr.isEmpty() && validarEdad(edadStr)) {
+                try {
+                    int edad = Integer.parseInt(edadStr);
+                    actualizarCampoEnBD("edad", edad);
+                } catch (NumberFormatException e) {
+                    // Ya se maneja en validarEdad
+                }
+            }
+        }
+    });
+}
+
+
+private void configurarValidacionNombres() {
+    jTFNombres.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            String nombres = jTFNombres.getText().trim();
+            if (!nombres.isEmpty() && validarNombres(nombres)) {
+                actualizarCampoEnBD("nombres", nombres);
+            }
+        }
+    });
+}
+
+private void configurarValidacionApellidos() {
+    jTFApellidos.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            String apellidos = jTFApellidos.getText().trim();
+            if (!apellidos.isEmpty() && validarApellidos(apellidos)) {
+                actualizarCampoEnBD("apellidos", apellidos);
+            }
+        }
+    });
+}
+
+private void configurarValidacionSexo() {
+    jTFGenero.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            String sexo = jTFGenero.getText().trim();
+            if (!sexo.isEmpty() && validarSexo(sexo)) {
+                actualizarCampoEnBD("sexo", sexo);
+            }
+        }
+    });
+}
+
+private void configurarValidacionCorreo() {
+    jTFCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            String correo = jTFCorreo.getText().trim();
+            if (!correo.isEmpty() && validarCorreo(correo)) {
+                actualizarCampoEnBD("correo", correo);
+            }
+        }
+    });
+}
+
+
+
+// Métodos de validación
+private boolean validarNombres(String nombres) {
+    if (!nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+        
+        jTFNombres.requestFocus();
+        return false;
+    }
+    return true;
+}
+private boolean validarEdad(String edadStr) {
+    if (edadStr.isEmpty()) {
+        return false;
+    }
+    try {
+        int edad = Integer.parseInt(edadStr);
+        if (edad < 0 || edad > 120) {
+            
+            return false;
+        }
+        return true;
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Edad inválida. Debe ser un número entero", 
+            "Error de validación", 
+            JOptionPane.ERROR_MESSAGE);
+        jTFEdad.requestFocus();
+        return false;
+    }
+}
+
+private boolean validarApellidos(String apellidos) {
+    if (!apellidos.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+        
+        jTFApellidos.requestFocus();
+        return false;
+    }
+    return true;
+}
+
+private boolean validarSexo(String sexo) {
+    if (!sexo.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+")) {
+        
+        this.jTFGenero.requestFocus();
+        return false;
+    }
+    return true;
+}
+
+private boolean validarCorreo(String correo) {
+    if (correo.isEmpty()) {
+        return false;
+    }
+    if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        
+        jTFCorreo.requestFocus();
+        return false;
+    }
+    return true;
+}
+
+// Método para actualizar cualquier campo en la base de datos
+private boolean actualizarCampoEnBD(String campo, Object valor) {
+   if (this.cedulaPaciente == null || this.cedulaPaciente.isEmpty()) {
+        JOptionPane.showMessageDialog(this, 
+            "No hay paciente seleccionado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    String sql = "UPDATE Paciente SET " + campo + " = ? WHERE cedula = ?";
+    
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        if (valor instanceof java.sql.Date) {
+            pstmt.setDate(1, (java.sql.Date) valor);
+        } else if (valor instanceof Integer) {
+            pstmt.setInt(1, (Integer) valor);
+        } else if (valor instanceof String) {
+            pstmt.setString(1, (String) valor);
+        } else {
+            pstmt.setObject(1, valor);
+        }
+        
+        pstmt.setString(2, this.cedulaPaciente);
+        
+        int filasAfectadas = pstmt.executeUpdate();
+        return filasAfectadas > 0;
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al actualizar " + campo + ": " + e.getMessage(), 
+            "Error de base de datos", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return false;
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error: Driver JDBC no encontrado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return false;
+    }
+}
+private void configurarValidacionFecha() {
+    jTFFechaNacimiento.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            String fechaStr = jTFFechaNacimiento.getText().trim();
+            
+            if (!fechaStr.isEmpty() && validarFechaSQL(fechaStr)) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date fechaUtil = sdf.parse(fechaStr);
+                    java.sql.Date fechaNacimiento = new java.sql.Date(fechaUtil.getTime());
+                    
+                    actualizarCampoEnBD("fecha_nacimiento", fechaNacimiento);
+                } catch (ParseException e) {
+                    JOptionPane.showMessageDialog(informacion_doctor.this, 
+                        "Error al procesar la fecha", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    });
+}
+private void ActualizarTelefono() {
+    String telefono = jTFTelefono.getText().trim();
+    if (telefono.isEmpty()) {
+        actualizarCampoEnBD("telefono", telefono);
+    } else {
+        if (validarTelefono(telefono)) {
+            actualizarCampoEnBD("telefono", telefono);
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Teléfono inválido. Debe contener 10 dígitos.", 
+                "Error de validación", 
+                JOptionPane.ERROR_MESSAGE);
+            jTFTelefono.requestFocus();
+        }
+    }
+}
+
+private void actualizarEstadoCivil() {
+    String estadoCivil = (String) jCBEstadoCivil.getSelectedItem();
+    actualizarCampoEnBD("estado_civil", estadoCivil);
+}
+private boolean validarTelefono(String telefono) {
+    return telefono.matches("\\d{10}");
+}
+
+
+// Método de validación de fecha (como antes)
+private boolean validarFechaSQL(String fecha) {
+    try {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        Date date = sdf.parse(fecha);
+        
+        // Verificar que no sea fecha futura
+        if (date.after(new Date())) {
+            if (fecha.isEmpty()) {
+        return false;
+    }
+            JOptionPane.showMessageDialog(this, 
+                "La fecha no puede ser futura", 
+                "Error de fecha", 
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    } catch (ParseException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Formato de fecha inválido. Use YYYY-MM-DD", 
+            "Error de formato", 
+            JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+}
+
+    private void jTFFechaNacimientoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFFechaNacimientoFocusLost
+       
+    }//GEN-LAST:event_jTFFechaNacimientoFocusLost
+
+    private void jTFEdadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFEdadFocusLost
+         String edadStr = this.jTFEdad.getText().trim();
+    if (!edadStr.isEmpty() && validarEdad(edadStr)) {
+        actualizarCampoEnBD("edad", Integer.parseInt(edadStr));
+    }
+    }//GEN-LAST:event_jTFEdadFocusLost
+
+    private void jTFCorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFCorreoFocusLost
+       String correo = this.jTFCorreo.getText().trim();
+    if (!correo.isEmpty() && validarCorreo(correo)) {
+        actualizarCampoEnBD("correo", correo);
+    }
+    }//GEN-LAST:event_jTFCorreoFocusLost
+
+    private void jTFTelefonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFTelefonoFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFTelefonoFocusLost
+
+    private void jTFTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFTelefonoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFTelefonoActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -1050,9 +1521,11 @@ switch (opcion) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
+    private javax.swing.JComboBox<String> jCBEstadoCivil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
@@ -1065,6 +1538,8 @@ switch (opcion) {
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1077,13 +1552,14 @@ switch (opcion) {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTEvolucion;
-    private javax.swing.JTextField jTFAlergias;
     private javax.swing.JTextField jTFApellidos;
     private javax.swing.JTextField jTFCedula;
     private javax.swing.JTextField jTFCorreo;
+    private javax.swing.JTextField jTFEdad;
     private javax.swing.JTextField jTFFechaNacimiento;
+    private javax.swing.JTextField jTFGenero;
     private javax.swing.JTextField jTFNombres;
-    private javax.swing.JTextField jTFSexo;
+    private javax.swing.JTextField jTFTelefono;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField24;
     private javax.swing.JButton jbbuscar;

@@ -12,7 +12,7 @@ import java.util.List;
 public class CitaDAO {
     public static Map<String, String> obtenerPacienteConCitaMasProxima(String cedulaDoctor) {
         Map<String, String> datosPaciente = new HashMap<>();
-        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.fecha_nacimiento, p.sexo, p.correo, p.alergias, c.fecha, c.hora " +
+        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos,p.estado_civil,p.telefono, p.fecha_nacimiento, p.sexo, p.edad ,p.correo, p.alergias, c.fecha, c.hora " +
                      "FROM Cita c " +
                      "INNER JOIN Paciente p ON c.id_paciente = p.cedula " +
                      "WHERE c.id_doctor = ? " + // cedula del doctor que inició sesión
@@ -26,7 +26,7 @@ public class CitaDAO {
             ResultSet rs = pstmt.executeQuery();
             
             if (rs.next()) {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String fechaNacimiento = "";
                 if (rs.getDate("fecha_nacimiento") != null) {
                     fechaNacimiento = sdf.format(rs.getDate("fecha_nacimiento"));
@@ -39,7 +39,10 @@ public class CitaDAO {
                 datosPaciente.put("sexo", rs.getString("sexo"));
                 datosPaciente.put("correo", rs.getString("correo"));
                 datosPaciente.put("alergias", rs.getString("alergias"));
-                
+                datosPaciente.put("edad", rs.getString("edad"));
+                datosPaciente.put("telefono", rs.getString("telefono"));
+                datosPaciente.put("estado_civil", rs.getString("estado_civil"));
+               
                 if (rs.getDate("fecha") != null) {
                     datosPaciente.put("fecha_cita", sdf.format(rs.getDate("fecha")));
                 }

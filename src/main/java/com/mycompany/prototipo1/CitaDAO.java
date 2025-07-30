@@ -166,8 +166,30 @@ public static List<Map<String, String>> obtenerEvolucion(String cedulaPaciente) 
     System.out.println(citas);
     return citas;
 }
-
-
-
+public static Map<String, String> obtenerDatosContacto(String cedulaPaciente) {
+    Map<String, String> datosContacto = new HashMap<>();
+    
+    String sql = "SELECT c.cedula, c.nombres, c.apellidos, c.telefono " +
+                 "FROM Contacto c, Paciente p " +
+                 "WHERE p.id_contacto = c.cedula AND p.cedula = ?";
+    
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, cedulaPaciente);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            datosContacto.put("cedula", rs.getString("cedula"));
+            datosContacto.put("nombres", rs.getString("nombres"));
+            datosContacto.put("apellidos", rs.getString("apellidos"));
+            datosContacto.put("telefono", rs.getString("telefono"));
+        }
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+    
+    return datosContacto;
+}
 
 }

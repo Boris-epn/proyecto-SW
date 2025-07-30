@@ -29,7 +29,9 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
 import javax.swing.table.TableColumnModel;
@@ -65,7 +67,30 @@ public class informacion_doctor extends javax.swing.JFrame {
         cargarDatosDelPaciente();
         cargarEvolucion();
         configurarValidaciones();
+        cargarDatosContacto();
     }
+    
+  private void cargarDatosContacto() {
+    if (this.cedulaPaciente == null || this.cedulaPaciente.isEmpty()) {
+        return;
+    }
+    
+    // Obtener datos de contacto desde la BD (incluyendo ahora el teléfono)
+    Map<String, String> datosContacto = CitaDAO.obtenerDatosContacto(this.cedulaPaciente);
+    
+    if (datosContacto != null && !datosContacto.isEmpty()) {
+        jTFCedulaContacto.setText(datosContacto.getOrDefault("cedula", ""));
+        jTFNombresContacto.setText(datosContacto.getOrDefault("nombres", ""));
+        jTFApellidosContacto.setText(datosContacto.getOrDefault("apellidos", ""));
+        jTFTelefonoContacto.setText(datosContacto.getOrDefault("telefono", "")); // Nuevo campo
+    }
+    
+    // Deshabilitar campos inicialmente
+    jTFCedulaContacto.setEditable(false);
+    jTFNombresContacto.setEditable(false);
+    jTFApellidosContacto.setEditable(false);
+    jTFTelefonoContacto.setEditable(false); // Nuevo campo
+}
     
     private void cargarEvolucion() {
     if (this.cedulaPaciente == null || this.cedulaPaciente.isEmpty()) {
@@ -358,11 +383,20 @@ private void limpiarTablaAntecedentes() {
         jbeditar = new javax.swing.JButton();
         jTFGenero = new javax.swing.JTextField();
         jTFEdad = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jCBEstadoCivil = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jTFTelefono = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jTFCedulaContacto = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTFNombresContacto = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jTFTelefonoContacto = new javax.swing.JTextField();
+        jBEditarContacto = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jTFApellidosContacto = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -428,7 +462,7 @@ private void limpiarTablaAntecedentes() {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59)
                 .addComponent(jButton2)
-                .addContainerGap(256, Short.MAX_VALUE))
+                .addContainerGap(294, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Evolución", jPanel6);
@@ -642,7 +676,7 @@ private void limpiarTablaAntecedentes() {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel41)
                     .addComponent(jtfalergias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jbguardar))
@@ -682,7 +716,7 @@ private void limpiarTablaAntecedentes() {
                     .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(81, 81, 81)
                 .addComponent(jbbuscar)
-                .addContainerGap(552, Short.MAX_VALUE))
+                .addContainerGap(590, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
@@ -772,8 +806,6 @@ private void limpiarTablaAntecedentes() {
             }
         });
 
-        jLabel7.setText("Persona de contacto");
-
         jLabel27.setText("Estado civil");
 
         jCBEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casado/a", "Divorciado/a", "Viduo/a", "Soltero/a" }));
@@ -792,14 +824,80 @@ private void limpiarTablaAntecedentes() {
             }
         });
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Persona de contacto"));
+
+        jLabel7.setText("Cédula");
+
+        jLabel9.setText("Nombres");
+
+        jLabel10.setText("Apellidos");
+
+        jBEditarContacto.setText("Editar");
+        jBEditarContacto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEditarContactoActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Telefono");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(316, 316, 316)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTFNombresContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(123, 123, 123)
+                        .addComponent(jTFCedulaContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTFApellidosContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTFTelefonoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(198, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBEditarContacto)
+                .addGap(386, 386, 386))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTFCedulaContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTFNombresContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jTFApellidosContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jTFTelefonoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBEditarContacto)
+                .addContainerGap(69, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(322, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -832,6 +930,9 @@ private void limpiarTablaAntecedentes() {
                         .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(213, 213, 213))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 15, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -879,9 +980,9 @@ private void limpiarTablaAntecedentes() {
                 .addComponent(jbeditar)
                 .addGap(33, 33, 33)
                 .addComponent(jLabel42)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
-                .addGap(293, 293, 293))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
         );
 
         jtpinformacionpaciente.addTab("Información del paciente", jPanel1);
@@ -1479,7 +1580,182 @@ private boolean validarFechaSQL(String fecha) {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFTelefonoActionPerformed
 
+    private void jBEditarContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarContactoActionPerformed
+      if (this.jBEditarContacto.getText().equals("Finalizar")) {
+        // Validar todos los campos antes de finalizar (incluyendo teléfono)
+        if (validarCamposContacto()) {
+            // Guardar cambios en la BD
+            if (guardarCambiosContacto()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Cambios guardados correctamente", 
+                    "Éxito", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Deshabilitar edición
+                jTFCedulaContacto.setEditable(false);
+                jTFNombresContacto.setEditable(false);
+                jTFApellidosContacto.setEditable(false);
+                jTFTelefonoContacto.setEditable(false); // Nuevo campo
+                jBEditarContacto.setText("Editar");
+            }
+        }
+    } else {
+        // Habilitar edición
+        if (this.jTFCedulaContacto.getText() == ""){
+            jTFCedulaContacto.setEditable(true);
+        }else{
+            this.jTFCedulaContacto.setEditable(false);
+        }
+        
+        jTFNombresContacto.setEditable(true);
+        jTFApellidosContacto.setEditable(true);
+        jTFTelefonoContacto.setEditable(true); // Nuevo campo
+        jBEditarContacto.setText("Finalizar");
+    }
+    }//GEN-LAST:event_jBEditarContactoActionPerformed
+
+   
+    private boolean validarCamposContacto() {
+     boolean validos = true;
+    StringBuilder errores = new StringBuilder();
     
+    // Validar cédula
+    String cedula = jTFCedulaContacto.getText().trim();
+    if (!validarCedulaContacto(cedula)) {
+        errores.append("- Cédula de contacto inválida\n");
+        validos = false;
+    }
+    
+    // Validar nombres
+    String nombres = jTFNombresContacto.getText().trim();
+    if (!validarNombresContacto(nombres)) {
+        errores.append("- Nombres de contacto inválidos\n");
+        validos = false;
+    }
+    
+    // Validar apellidos
+    String apellidos = jTFApellidosContacto.getText().trim();
+    if (!validarApellidosContacto(apellidos)) {
+        errores.append("- Apellidos de contacto inválidos\n");
+        validos = false;
+    }
+    
+    // Validar teléfono (nueva validación)
+    String telefono = jTFTelefonoContacto.getText().trim();
+    if (!telefono.isEmpty() && !validarTelefono(telefono)) {
+        errores.append("- Teléfono de contacto inválido\n");
+        validos = false;
+    }
+    
+    if (!validos) {
+        JOptionPane.showMessageDialog(this, 
+            "Por favor corrija los siguientes errores:\n" + errores.toString(), 
+            "Errores de validación", 
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
+    return validos;
+}
+    
+
+private boolean validarCedulaContacto(String cedula) {
+    if (cedula.isEmpty()) {
+        return false;
+    }
+    
+    // Validación básica de cédula (puedes usar la misma que para el paciente)
+    return cedula.matches("\\d{10}");
+}
+
+private boolean validarNombresContacto(String nombres) {
+    return !nombres.isEmpty() && nombres.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+");
+}
+
+private boolean validarApellidosContacto(String apellidos) {
+    return !apellidos.isEmpty() && apellidos.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ ]+");
+}
+private boolean guardarCambiosContacto() {
+    if (this.cedulaPaciente == null || this.cedulaPaciente.isEmpty()) {
+        JOptionPane.showMessageDialog(this, 
+            "No hay paciente seleccionado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+
+    String cedulaContacto = jTFCedulaContacto.getText().trim();
+    String nombres = jTFNombresContacto.getText().trim();
+    String apellidos = jTFApellidosContacto.getText().trim();
+    String telefono = jTFTelefonoContacto.getText().trim();
+
+    try (Connection conn = ConexionSQLServer.conectar()) {
+        // Primero verificar si ya existe un contacto para este paciente
+        String sqlCheck = "SELECT id_contacto FROM Paciente WHERE cedula = ?";
+        try (PreparedStatement pstmtCheck = conn.prepareStatement(sqlCheck)) {
+            pstmtCheck.setString(1, this.cedulaPaciente);
+            ResultSet rs = pstmtCheck.executeQuery();
+            
+            if (rs.next()) {
+                String idContactoExistente = rs.getString("id_contacto");
+                
+                if (idContactoExistente != null && !idContactoExistente.isEmpty()) {
+                    // Actualizar contacto existente
+                    String sqlUpdate = "UPDATE Contacto SET nombres = ?, apellidos = ?, telefono = ? WHERE cedula = ?";
+                    try (PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate)) {
+                        pstmtUpdate.setString(1, nombres);
+                        pstmtUpdate.setString(2, apellidos);
+                        pstmtUpdate.setString(3, telefono);
+                        pstmtUpdate.setString(4, idContactoExistente);
+                        
+                        int updated = pstmtUpdate.executeUpdate();
+                        
+                        if (updated > 0) {
+                            // Si la cédula del contacto cambió, actualizamos también el id_contacto en Paciente
+                            if (!idContactoExistente.equals(cedulaContacto)) {
+                                String sqlUpdatePaciente = "UPDATE Paciente SET id_contacto = ? WHERE cedula = ?";
+                                try (PreparedStatement pstmtUpdatePaciente = conn.prepareStatement(sqlUpdatePaciente)) {
+                                    pstmtUpdatePaciente.setString(1, cedulaContacto);
+                                    pstmtUpdatePaciente.setString(2, this.cedulaPaciente);
+                                    return pstmtUpdatePaciente.executeUpdate() > 0;
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+            
+            // Si no existe, crear nuevo contacto
+            String sqlInsert = "INSERT INTO Contacto (cedula, nombres, apellidos, telefono) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert)) {
+                pstmtInsert.setString(1, cedulaContacto);
+                pstmtInsert.setString(2, nombres);
+                pstmtInsert.setString(3, apellidos);
+                pstmtInsert.setString(4, telefono);
+                
+                int affectedRows = pstmtInsert.executeUpdate();
+                
+                if (affectedRows > 0) {
+                    // Actualizar referencia en Paciente usando la misma cédula como id_contacto
+                    String sqlUpdatePaciente = "UPDATE Paciente SET id_contacto = ? WHERE cedula = ?";
+                    try (PreparedStatement pstmtUpdatePaciente = conn.prepareStatement(sqlUpdatePaciente)) {
+                        pstmtUpdatePaciente.setString(1, cedulaContacto);
+                        pstmtUpdatePaciente.setString(2, this.cedulaPaciente);
+                        return pstmtUpdatePaciente.executeUpdate() > 0;
+                    }
+                }
+            }
+        }
+    } catch (SQLException | ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al guardar datos de contacto: " + e.getMessage(), 
+            "Error de base de datos", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    
+    return false;
+}
     /**
      * @param args the command line arguments
      */
@@ -1519,10 +1795,13 @@ private boolean validarFechaSQL(String fecha) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBEditarContacto;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jCBEstadoCivil;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
@@ -1540,7 +1819,9 @@ private boolean validarFechaSQL(String fecha) {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1553,13 +1834,17 @@ private boolean validarFechaSQL(String fecha) {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTEvolucion;
     private javax.swing.JTextField jTFApellidos;
+    private javax.swing.JTextField jTFApellidosContacto;
     private javax.swing.JTextField jTFCedula;
+    private javax.swing.JTextField jTFCedulaContacto;
     private javax.swing.JTextField jTFCorreo;
     private javax.swing.JTextField jTFEdad;
     private javax.swing.JTextField jTFFechaNacimiento;
     private javax.swing.JTextField jTFGenero;
     private javax.swing.JTextField jTFNombres;
+    private javax.swing.JTextField jTFNombresContacto;
     private javax.swing.JTextField jTFTelefono;
+    private javax.swing.JTextField jTFTelefonoContacto;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField24;
     private javax.swing.JButton jbbuscar;

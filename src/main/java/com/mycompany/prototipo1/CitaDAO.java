@@ -184,6 +184,7 @@ public static Map<String, String> obtenerDatosContacto(String cedulaPaciente) {
             datosContacto.put("nombres", rs.getString("nombres"));
             datosContacto.put("apellidos", rs.getString("apellidos"));
             datosContacto.put("telefono", rs.getString("telefono"));
+            
         }
     } catch (SQLException | ClassNotFoundException e) {
         e.printStackTrace();

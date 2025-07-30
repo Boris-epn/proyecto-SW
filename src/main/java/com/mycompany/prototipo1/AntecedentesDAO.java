@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.prototipo1;
 
-/**
- *
- * @author USUARIO
- */
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,15 +13,13 @@ public class AntecedentesDAO {
     /**
      * Obtiene los antecedentes de un paciente específico usando su cédula.
      * @param cedulaPaciente La cédula del paciente a buscar.
-     * @return Un Map con los antecedentes (claves: "familiares", "patologicos", "fisiologicos").
+     * @return Un Map con los antecedentes (claves: "familiares", "patologicos", "fisiologicos", "enfermedades_actuales").
      */
     public static Map<String, String> obtenerAntecedentesPorPaciente(String cedulaPaciente) {
         Map<String, String> antecedentes = new HashMap<>();
-        // Nota: El campo en tu tabla Paciente parece tener un error de tipeo ("id_antecedetes").
-        // La consulta usa ese nombre exacto para funcionar. Si lo corriges en la BD, actualiza la consulta.
-        String sql = "SELECT a.familiares, a.patologicos, a.fisiologicos " +
+        String sql = "SELECT a.familiares, a.patologicos, a.fisiologicos, a.enfermedades_actuales " + // Campo añadido
                      "FROM Antecedentes a " +
-                     "INNER JOIN Paciente p ON a.id_antecedentes = p.id_antecedetes " +
+                     "INNER JOIN Paciente p ON a.id_antecedentes = p.id_antecedetes " + // Nota: 'id_antecedetes' parece tener error de tipeo
                      "WHERE p.cedula = ?";
 
         try (Connection conn = ConexionSQLServer.conectar();
@@ -42,6 +32,7 @@ public class AntecedentesDAO {
                 antecedentes.put("familiares", rs.getString("familiares"));
                 antecedentes.put("patologicos", rs.getString("patologicos"));
                 antecedentes.put("fisiologicos", rs.getString("fisiologicos"));
+                antecedentes.put("enfermedades_actuales", rs.getString("enfermedades_actuales")); // Nuevo campo
             }
 
         } catch (SQLException e) {
@@ -57,7 +48,8 @@ public class AntecedentesDAO {
                 JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+        System.out.println("Antecedenteeeeeeeesssssssssssssssssssss");
+        System.out.println(antecedentes);
         return antecedentes;
     }
-    
 }

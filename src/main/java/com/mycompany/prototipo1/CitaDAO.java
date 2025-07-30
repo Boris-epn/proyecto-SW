@@ -12,7 +12,7 @@ import java.util.List;
 public class CitaDAO {
     public static Map<String, String> obtenerPacienteConCitaMasProxima(String cedulaDoctor) {
         Map<String, String> datosPaciente = new HashMap<>();
-        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos,p.estado_civil,p.telefono, p.fecha_nacimiento, p.sexo, p.edad ,p.correo, p.alergias, c.fecha, c.hora " +
+        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos,p.estado_civil,p.sangre,p.telefono, p.fecha_nacimiento, p.sexo, p.edad ,p.correo, p.alergias, c.fecha, c.hora " +
                      "FROM Cita c " +
                      "INNER JOIN Paciente p ON c.id_paciente = p.cedula " +
                      "WHERE c.id_doctor = ? " + // cedula del doctor que inició sesión
@@ -42,6 +42,7 @@ public class CitaDAO {
                 datosPaciente.put("edad", rs.getString("edad"));
                 datosPaciente.put("telefono", rs.getString("telefono"));
                 datosPaciente.put("estado_civil", rs.getString("estado_civil"));
+                datosPaciente.put("sangre", rs.getString("sangre"));
                
                 if (rs.getDate("fecha") != null) {
                     datosPaciente.put("fecha_cita", sdf.format(rs.getDate("fecha")));

@@ -154,6 +154,7 @@ public class informacion_doctor extends javax.swing.JFrame {
         this.jTFCorreo.setText(datos.getOrDefault("correo", ""));
         this.jtfalergias.setText(datos.getOrDefault("alergias",""));
         this.jTFTelefono.setText(datos.getOrDefault("telefono", ""));
+        this.jTFSangre.setText(datos.getOrDefault("sangre", ""));
         if(datos.get("estado_civil") == ""){
             System.out.println(" no se ha escogido estado civil");
         }else if(datos.get("estado_civil")=="Casado/a"){
@@ -373,6 +374,8 @@ private void limpiarTablaAntecedentes() {
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanelConsultasContainer = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        jTFSangre = new javax.swing.JTextField();
         jPEvolucion = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -687,7 +690,7 @@ private void limpiarTablaAntecedentes() {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 848, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -695,7 +698,7 @@ private void limpiarTablaAntecedentes() {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Consultas previas"));
@@ -709,7 +712,7 @@ private void limpiarTablaAntecedentes() {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 856, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -720,25 +723,36 @@ private void limpiarTablaAntecedentes() {
                 .addContainerGap())
         );
 
+        jLabel12.setText("tipo de sangre");
+
         javax.swing.GroupLayout jPHistoriaClinicaLayout = new javax.swing.GroupLayout(jPHistoriaClinica);
         jPHistoriaClinica.setLayout(jPHistoriaClinicaLayout);
         jPHistoriaClinicaLayout.setHorizontalGroup(
             jPHistoriaClinicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPHistoriaClinicaLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addGroup(jPHistoriaClinicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPHistoriaClinicaLayout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(jTFSangre, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPHistoriaClinicaLayout.setVerticalGroup(
             jPHistoriaClinicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPHistoriaClinicaLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(22, 22, 22)
+                .addGroup(jPHistoriaClinicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jTFSangre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(26, 26, 26)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(88, 88, 88))
+                .addGap(21, 21, 21))
         );
 
         jtpinformacionpaciente.addTab("Historia clínica", jPHistoriaClinica);
@@ -1804,6 +1818,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
@@ -1845,6 +1860,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JTextField jTFGenero;
     private javax.swing.JTextField jTFNombres;
     private javax.swing.JTextField jTFNombresContacto;
+    private javax.swing.JTextField jTFSangre;
     private javax.swing.JTextField jTFTelefono;
     private javax.swing.JTextField jTFTelefonoContacto;
     private javax.swing.JTable jTable1;

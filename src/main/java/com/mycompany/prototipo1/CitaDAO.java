@@ -75,7 +75,7 @@ public class CitaDAO {
         return datosPaciente;
         
     }
-    // En el archivo CitaDAO.java
+    
 
 public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente) {
     List<ConsultaPrevia> consultas = new ArrayList<>();

@@ -3,10 +3,20 @@ package com.mycompany.prototipo1;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class PacienteDAO {
+    private int cedula;
+
+    public PacienteDAO(int cedula) {
+        this.cedula = cedula;
+    }
+    
 
     /**
      * Busca pacientes en la base de datos por cédula o nombre completo.
@@ -61,4 +71,55 @@ public class PacienteDAO {
         
         return model;
     }
+    public static Map<String, String> obtenerInformacionPacientePorCedula(String cedulaPaciente) {
+    Map<String, String> datosPaciente = new HashMap<>();
+    String sql = "SELECT p.cedula, p.nombres, p.apellidos, p.estado_civil, p.sangre, p.telefono, " +
+                 "p.fecha_nacimiento, p.sexo, p.edad, p.correo, p.alergias " +
+                 "FROM Paciente p " +
+                 "WHERE p.cedula = ?";
+    
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, cedulaPaciente);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaNacimiento = "";
+            if (rs.getDate("fecha_nacimiento") != null) {
+                fechaNacimiento = sdf.format(rs.getDate("fecha_nacimiento"));
+            }
+            
+            datosPaciente.put("cedula", rs.getString("cedula"));
+            datosPaciente.put("nombres", rs.getString("nombres"));
+            datosPaciente.put("apellidos", rs.getString("apellidos"));
+            datosPaciente.put("fecha_nacimiento", fechaNacimiento);
+            datosPaciente.put("sexo", rs.getString("sexo"));
+            datosPaciente.put("correo", rs.getString("correo"));
+            datosPaciente.put("alergias", rs.getString("alergias"));
+            datosPaciente.put("edad", rs.getString("edad"));
+            datosPaciente.put("telefono", rs.getString("telefono"));
+            datosPaciente.put("estado_civil", rs.getString("estado_civil"));
+            datosPaciente.put("sangre", rs.getString("sangre"));
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error en la consulta SQL: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error: Driver JDBC no encontrado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    
+    System.out.println("*******************");
+    System.out.println("Datos del paciente encontrados: " + datosPaciente);
+    return datosPaciente;
+}
 }

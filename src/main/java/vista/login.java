@@ -131,9 +131,10 @@ public class login extends javax.swing.JFrame {
             
             if (rs.next()) {
                 String dbPassword = rs.getString("contrasena_paciente");
+                String cedula= rs.getString("cedula");
                 if (dbPassword != null && dbPassword.equals(contrasena)) {
                     JOptionPane.showMessageDialog(this, "Acceso concedido como paciente");
-                    informacion_paciente paciente = new informacion_paciente();
+                    informacion_paciente paciente = new informacion_paciente(Integer.parseInt(cedula));
                     paciente.setVisible(true);
                     this.dispose(); // Cerrar ventana de login
                     return;

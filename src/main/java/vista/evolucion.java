@@ -3,20 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-
+import com.mycompany.prototipo1.EvolucionDAO; // Importar el nuevo DAO
+import javax.swing.JOptionPane;
 /**
  *
  * @author USUARIO
  */
 public class evolucion extends javax.swing.JFrame {
+     private int idCita;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(evolucion.class.getName());
 
     /**
      * Creates new form evolucion
      */
+    
     public evolucion() {
+    }
+
+    public evolucion(int idCita) {
         initComponents();
+        this.idCita = idCita;
         this.setLocationRelativeTo(this);
     }
 
@@ -29,22 +36,22 @@ public class evolucion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        jTFEvolucion = new javax.swing.JTextField();
+        jTFDiagnostico = new javax.swing.JTextField();
+        jTFPronostico = new javax.swing.JTextField();
+        jTFTratamiento = new javax.swing.JTextField();
         jbguardar = new javax.swing.JButton();
         jbcancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder("Evolución"));
+        jTFEvolucion.setBorder(javax.swing.BorderFactory.createTitledBorder("Evolución"));
 
-        jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder("Diagnóstico"));
+        jTFDiagnostico.setBorder(javax.swing.BorderFactory.createTitledBorder("Diagnóstico"));
 
-        jTextField3.setBorder(javax.swing.BorderFactory.createTitledBorder("Pronóstico"));
+        jTFPronostico.setBorder(javax.swing.BorderFactory.createTitledBorder("Pronóstico"));
 
-        jTextField4.setBorder(javax.swing.BorderFactory.createTitledBorder("Tratamiento"));
+        jTFTratamiento.setBorder(javax.swing.BorderFactory.createTitledBorder("Tratamiento"));
 
         jbguardar.setText("Guardar");
         jbguardar.addActionListener(new java.awt.event.ActionListener() {
@@ -65,31 +72,32 @@ public class evolucion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2)
-                    .addComponent(jTextField3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jbguardar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
                 .addComponent(jbcancelar)
                 .addGap(49, 49, 49))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTFEvolucion, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jTFTratamiento, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                        .addComponent(jTFDiagnostico)
+                        .addComponent(jTFPronostico)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addComponent(jTFEvolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFPronostico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTFTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbguardar)
@@ -101,6 +109,30 @@ public class evolucion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbguardarActionPerformed
+         // 1. Obtener los datos de los campos de texto
+         System.out.println("En evolucion el id cita es");
+         System.out.println(this.idCita);
+        String descEvolucion = jTFEvolucion.getText();
+        String descDiagnostico = jTFDiagnostico.getText();
+        String descPronostico = jTFPronostico.getText();
+        String descTratamiento = jTFTratamiento.getText();
+
+        // 2. Llamar al método del DAO para guardar
+        boolean exito = EvolucionDAO.guardarEvolucion(
+            this.idCita, 
+            descEvolucion, 
+            descDiagnostico, 
+            descPronostico, 
+            descTratamiento
+        );
+
+        // 3. Informar al usuario y cerrar la ventana
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Evolución guardada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose(); // Cierra la ventana actual
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo guardar la evolución.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         this.setVisible(false);
     }//GEN-LAST:event_jbguardarActionPerformed
 
@@ -134,10 +166,10 @@ public class evolucion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTFDiagnostico;
+    private javax.swing.JTextField jTFEvolucion;
+    private javax.swing.JTextField jTFPronostico;
+    private javax.swing.JTextField jTFTratamiento;
     private javax.swing.JButton jbcancelar;
     private javax.swing.JButton jbguardar;
     // End of variables declaration//GEN-END:variables

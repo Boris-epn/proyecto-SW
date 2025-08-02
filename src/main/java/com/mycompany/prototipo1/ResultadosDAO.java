@@ -25,6 +25,25 @@ public class ResultadosDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return diagnostico;
     }
+  public static String obtenerFecha(int idCita) {
+    String fecha = "";
+    String sql = "SELECT CONVERT(varchar, fecha, 23) AS fecha_str FROM Cita WHERE id_cita = ?";
+    
+    try (Connection conn = ConexionSQLServer.conectar(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, idCita);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            fecha = rs.getString("fecha_str");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    return fecha;
+}
 
     /**
      * Obtiene todas las descripciones de tratamientos para una cita.

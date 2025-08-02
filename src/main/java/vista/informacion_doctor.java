@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mycompany.prototipo1.CitaDAO;
 import com.mycompany.prototipo1.ConexionSQLServer;
 import com.mycompany.prototipo1.ConsultaPrevia;
+import com.mycompany.prototipo1.PacienteDAO;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
@@ -436,6 +437,8 @@ private void limpiarTablaAntecedentes() {
         jcbbusqueda = new javax.swing.JComboBox<>();
         jtfbusqueda = new javax.swing.JTextField();
         jbbuscar = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTableResultados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1059,18 +1062,35 @@ private void limpiarTablaAntecedentes() {
             }
         });
 
+        jTableResultados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane6.setViewportView(jTableResultados);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(219, 219, 219)
                 .addComponent(jcbbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 224, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbbuscar)
-                    .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(150, 150, 150))
+                .addGap(28, 28, 28)
+                .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jbbuscar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(110, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(65, 65, 65))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1078,10 +1098,11 @@ private void limpiarTablaAntecedentes() {
                 .addGap(41, 41, 41)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(81, 81, 81)
-                .addComponent(jbbuscar)
-                .addContainerGap(585, Short.MAX_VALUE))
+                    .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbbuscar))
+                .addGap(42, 42, 42)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(298, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
@@ -1107,6 +1128,7 @@ private void limpiarTablaAntecedentes() {
 
     private void jbbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbbuscarActionPerformed
         String opcion = this.jcbbusqueda.getSelectedItem().toString();
+        boolean bandera= true;
 
         switch (opcion) {
             case "Cédula":
@@ -1115,6 +1137,7 @@ private void limpiarTablaAntecedentes() {
                 JOptionPane.showMessageDialog(this,
                     "Cédula inválida. Debe contener 10 dígitos numéricos.",
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    bandera=false;
                 break;
             }
             int prov = Integer.parseInt(ced.substring(0, 2));
@@ -1123,6 +1146,7 @@ private void limpiarTablaAntecedentes() {
                 JOptionPane.showMessageDialog(this,
                     "Cédula inválida. Provincia o tercer dígito no válidos.",
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    bandera=false;
                 break;
             }
             int[] coef = {2,1,2,1,2,1,2,1,2};
@@ -1137,6 +1161,7 @@ private void limpiarTablaAntecedentes() {
                 JOptionPane.showMessageDialog(this,
                     "Cédula inválida. Dígito verificador incorrecto.",
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
+                bandera= false;
             }
             break;
 
@@ -1146,8 +1171,26 @@ private void limpiarTablaAntecedentes() {
                 JOptionPane.showMessageDialog(this,
                     "Nombre inválido. No debe contener números ni caracteres especiales.",
                     "Error de validación", JOptionPane.ERROR_MESSAGE);
+                bandera= false;
             }
             break;
+        }
+        
+        if (bandera == true){
+            String criterio = (String) jcbbusqueda.getSelectedItem();
+        String valor = jtfbusqueda.getText().trim();
+
+        if (valor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+            return;
+     }
+    
+        DefaultTableModel model = PacienteDAO.buscarPacientes(criterio, valor);
+        jTableResultados.setModel(model); 
+    
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No se encontraron pacientes que coincidan con la búsqueda.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
+        }
         }
     }//GEN-LAST:event_jbbuscarActionPerformed
 
@@ -1851,6 +1894,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextArea jTAExamenFisico;
     private javax.swing.JTextArea jTAMotivo;
     private javax.swing.JTable jTEvolucion;
@@ -1875,6 +1919,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JTextField jTFTelefonoContacto;
     private javax.swing.JTextField jTFTemperatura;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableResultados;
     private javax.swing.JTextField jTextField24;
     private javax.swing.JButton jbbuscar;
     private javax.swing.JButton jbeditar;

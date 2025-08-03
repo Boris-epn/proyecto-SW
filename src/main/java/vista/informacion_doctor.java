@@ -17,8 +17,10 @@ import javax.swing.table.DefaultTableModel;
 import com.mycompany.prototipo1.CitaDAO;
 import com.mycompany.prototipo1.ConexionSQLServer;
 import com.mycompany.prototipo1.ConsultaPrevia;
+import com.mycompany.prototipo1.InternacionDAO;
 import com.mycompany.prototipo1.PacienteDAO;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -37,6 +39,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -73,7 +77,42 @@ public class informacion_doctor extends javax.swing.JFrame {
         configurarValidaciones();
         cargarDatosContacto();
         cargarDatosAnamnesis();
+        cargarInternaciones();
     }
+    private void cargarInternaciones() {
+        List<Map<String, Object>> internaciones = InternacionDAO.obtenerInternacionesPorPaciente(cedulaPaciente);
+        DefaultTableModel model = (DefaultTableModel) jTableInternaciones.getModel();
+        model.setRowCount(0); // Limpiar tabla
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        
+        for (Map<String, Object> internacion : internaciones) {
+            Object[] row = {
+                internacion.get("id_internacion"),
+                internacion.get("tipo"),
+                internacion.get("nivelDeCuidado"),
+                sdf.format((Date) internacion.get("fecha_apertura")),
+                internacion.get("diagnostico") != null ? internacion.get("diagnostico") : "Sin diagnóstico"
+            };
+            model.addRow(row);
+        }
+    }
+    
+    // Clase interna para formatear fechas en la tabla
+    private class DateCellRenderer extends DefaultTableCellRenderer {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value instanceof Date) {
+                value = sdf.format((Date) value);
+            }
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        }
+    }
+    
+    
     
   private void cargarDatosContacto() {
     if (this.cedulaPaciente == null || this.cedulaPaciente.isEmpty()) {
@@ -495,6 +534,9 @@ private void limpiarTablaAntecedentes() {
         jbbuscar = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTableResultados = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTableInternaciones = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1180,6 +1222,38 @@ private void limpiarTablaAntecedentes() {
         );
 
         jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
+
+        jTableInternaciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID Internaci[ón", "Tipo", "Nivel de cuidado", "Fecha Apertura", "Diagnóstico"
+            }
+        ));
+        jScrollPane7.setViewportView(jTableInternaciones);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(471, Short.MAX_VALUE))
+        );
+
+        jtpinformacionpaciente.addTab("Internaciones", jPanel4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -2003,6 +2077,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelConsultasContainer;
@@ -2012,6 +2087,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTextArea jTAExamenFisico;
     private javax.swing.JTextArea jTAMotivo;
     private javax.swing.JTable jTEvolucion;
@@ -2036,6 +2112,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JTextField jTFTelefonoContacto;
     private javax.swing.JTextField jTFTemperatura;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableInternaciones;
     private javax.swing.JTable jTableResultados;
     private javax.swing.JTextField jTextField24;
     private javax.swing.JButton jbbuscar;

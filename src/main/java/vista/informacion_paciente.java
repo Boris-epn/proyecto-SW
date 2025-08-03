@@ -150,7 +150,7 @@ public class informacion_paciente extends javax.swing.JFrame {
             // CORRECCIÓN: Se vuelve a añadir la etiqueta y el campo de especialidad.
             consultaPanel.add(new JLabel("Especialidad:"));
             consultaPanel.add(espField);
-            consultaPanel.add(new JLabel("Doctor:"));
+            consultaPanel.add(new JLabel("Médico:"));
             consultaPanel.add(docField);
             consultaPanel.add(btnResultados);
 

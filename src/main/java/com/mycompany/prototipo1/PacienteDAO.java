@@ -24,53 +24,64 @@ public class PacienteDAO {
      * @param valor El texto a buscar.
      * @return Un DefaultTableModel con los resultados para mostrar en una JTable.
      */
-    public static DefaultTableModel buscarPacientes(String criterio, String valor) {
-        // Definimos las columnas que tendrá nuestra tabla de resultados
-        String[] columnas = {"Cédula", "Nombres", "Apellidos", "Fecha de Nacimiento", "Sexo"};
-        DefaultTableModel model = new DefaultTableModel(null, columnas);
-        
-        String sql = "";
-        
-        // Construimos la consulta SQL dinámicamente dependiendo del criterio
-        if ("Cédula".equals(criterio)) {
-            sql = "SELECT cedula, nombres, apellidos, fecha_nacimiento, sexo FROM Paciente WHERE cedula LIKE ?";
-        } else if ("Nombre".equals(criterio)) {
-            // Usamos CONCAT para buscar en nombre y apellido juntos
-            sql = "SELECT cedula, nombres, apellidos, fecha_nacimiento, sexo FROM Paciente WHERE CONCAT(nombres, ' ', apellidos) LIKE ?";
-        } else {
-            return model; // Si el criterio no es válido, retorna un modelo vacío
-        }
-
-        try (Connection conn = ConexionSQLServer.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // Usamos '%' para que la búsqueda sea flexible (contenga el texto)
-            pstmt.setString(1, "%" + valor + "%");
-            
-            ResultSet rs = pstmt.executeQuery();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-            // Llenamos el modelo con las filas encontradas
-            while (rs.next()) {
-                Object[] fila = new Object[5];
-                fila[0] = rs.getString("cedula");
-                fila[1] = rs.getString("nombres");
-                fila[2] = rs.getString("apellidos");
-                if (rs.getDate("fecha_nacimiento") != null) {
-                    fila[3] = sdf.format(rs.getDate("fecha_nacimiento"));
-                } else {
-                    fila[3] = "";
-                }
-                fila[4] = rs.getString("sexo");
-                model.addRow(fila);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        return model;
+    public static DefaultTableModel buscarPacientesPorDoctor(String criterio, String valor, String cedulaDoctor) {
+    String[] columnas = {"Cédula", "Nombres", "Apellidos", "Fecha de Nacimiento", "Género"};
+    DefaultTableModel model = new DefaultTableModel(null, columnas);
+    
+    String sql = "";
+   
+    if ("Cédula".equals(criterio)) {
+        sql = "SELECT DISTINCT p.cedula, p.nombres, p.apellidos, p.fecha_nacimiento, p.sexo " +
+              "FROM Paciente p " +
+              "INNER JOIN Cita c ON p.cedula = c.id_paciente " +
+              "WHERE c.id_doctor = ? AND p.cedula LIKE ?";
+    } else if ("Nombre".equals(criterio)) {
+        sql = "SELECT DISTINCT p.cedula, p.nombres, p.apellidos, p.fecha_nacimiento, p.sexo " +
+              "FROM Paciente p " +
+              "INNER JOIN Cita c ON p.cedula = c.id_paciente " +
+              "WHERE c.id_doctor = ? AND CONCAT(p.nombres, ' ', p.apellidos) LIKE ?";
+    } else {
+        return model; // Si el criterio no es válido, retorna un modelo vacío
     }
+
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        // Establecemos los parámetros (primero el doctor, luego el valor de búsqueda)
+        pstmt.setString(1, cedulaDoctor);
+        pstmt.setString(2, "%" + valor + "%");
+        
+        ResultSet rs = pstmt.executeQuery();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Llenamos el modelo con las filas encontradas
+        while (rs.next()) {
+            Object[] fila = new Object[5];
+            fila[0] = rs.getString("cedula");
+            fila[1] = rs.getString("nombres");
+            fila[2] = rs.getString("apellidos");
+            fila[3] = rs.getDate("fecha_nacimiento") != null ? 
+                      sdf.format(rs.getDate("fecha_nacimiento")) : "";
+            fila[4] = rs.getString("sexo");
+            model.addRow(fila);
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al buscar pacientes: " + e.getMessage(),
+            "Error de base de datos",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error: Driver JDBC no encontrado",
+            "Error de configuración",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    
+    return model;
+}
     public static Map<String, String> obtenerInformacionPacientePorCedula(String cedulaPaciente) {
     Map<String, String> datosPaciente = new HashMap<>();
     String sql = "SELECT p.cedula, p.nombres, p.apellidos, p.estado_civil, p.sangre, p.telefono, " +

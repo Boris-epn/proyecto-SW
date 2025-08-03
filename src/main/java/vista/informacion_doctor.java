@@ -386,7 +386,7 @@ private void cargarConsultasPrevias() {
             // CORRECCIÓN: Se vuelve a añadir la etiqueta y el campo de especialidad.
             consultaPanel.add(new JLabel("Especialidad:"));
             consultaPanel.add(espField);
-            consultaPanel.add(new JLabel("Doctor:"));
+            consultaPanel.add(new JLabel("Médico:"));
             consultaPanel.add(docField);
             consultaPanel.add(btnResultados);
 
@@ -667,7 +667,7 @@ private void limpiarTablaAntecedentes() {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(316, 316, 316)
+                .addGap(319, 319, 319)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -722,7 +722,7 @@ private void limpiarTablaAntecedentes() {
         jPInformacionPacienteLayout.setHorizontalGroup(
             jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPInformacionPacienteLayout.createSequentialGroup()
-                .addContainerGap(41, Short.MAX_VALUE)
+                .addContainerGap(38, Short.MAX_VALUE)
                 .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionPacienteLayout.createSequentialGroup()
                         .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1134,7 +1134,7 @@ private void limpiarTablaAntecedentes() {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Fecha", "Hora", "Doctor", "Especialidad", "Diagnóstico", "Pronóstico"
+                "Fecha", "Hora", "Médico", "Especialidad", "Diagnóstico", "Pronóstico"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -1343,7 +1343,7 @@ private void limpiarTablaAntecedentes() {
         return;
     }
     
-    DefaultTableModel model = PacienteDAO.buscarPacientes(criterio, valor);
+    DefaultTableModel model = PacienteDAO.buscarPacientesPorDoctor(criterio, valor, this.cedulaDoctor);
     jTableResultados.setModel(model); 
     
     if (model.getRowCount() == 0) {

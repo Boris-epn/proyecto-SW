@@ -4,6 +4,8 @@
 
 package com.mycompany.prototipo1;
 
+import vista.login;
+
 /**
  *
  * @author USUARIO
@@ -12,5 +14,7 @@ public class Prototipo1 {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
+        login logeo = new login();
+        logeo.setVisible(true);
     }
 }

@@ -159,10 +159,12 @@ public class CitaDAO {
 public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente) {
     List<ConsultaPrevia> consultas = new ArrayList<>();
     
-    // CORRECCIÓN: Se selecciona d.especialidad y se elimina el JOIN a la tabla Tipo.
-    String sql = "SELECT c.id_cita, c.fecha, d.especialidad, d.nombres + ' ' + d.apellidos AS nombre_doctor " +
+    String sql = "SELECT c.id_cita, c.fecha, " +
+                 "COALESCE(e.Nombre, 'Sin especialidad') AS especialidad, " +
+                 "d.nombres + ' ' + d.apellidos AS nombre_doctor " +
                  "FROM Cita c " +
                  "INNER JOIN Doctor d ON c.id_doctor = d.cedula " +
+                 "LEFT JOIN Especialidades e ON d.id_especialidad = e.IdEspecialidad " +
                  "WHERE c.id_paciente = ? AND c.fecha < GETDATE() " +
                  "ORDER BY c.fecha DESC";
 
@@ -173,7 +175,6 @@ public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente
         ResultSet rs = pstmt.executeQuery();
 
         while (rs.next()) {
-            // CORRECCIÓN: Se llama al constructor con los 4 argumentos, incluyendo la especialidad.
             consultas.add(new ConsultaPrevia(
                 rs.getInt("id_cita"),
                 rs.getDate("fecha"),
@@ -182,8 +183,17 @@ public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente
             ));
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al consultar consultas previas: " + e.getMessage());
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al consultar consultas previas: " + e.getMessage(),
+            "Error de base de datos",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error: Driver JDBC no encontrado",
+            "Error de configuración",
+            JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }
     return consultas;
@@ -197,15 +207,16 @@ public static List<Map<String, String>> obtenerEvolucion(String cedulaPaciente) 
              "e.pronostico, " +
              "e.evolucion, " +
              "e.tratamiento, " +
-             "c.fecha , " +
-             "c.hora , " +
+             "c.fecha, " +
+             "c.hora, " +
              "d.nombres + ' ' + d.apellidos AS nombre_doctor, " +
-             "d.especialidad " +
+             "ISNULL(es.Nombre, 'Sin especialidad') AS especialidad " +
              "FROM Evolucion e " +
              "INNER JOIN Cita c ON e.id_cita = c.id_cita " +
              "INNER JOIN Doctor d ON c.id_doctor = d.cedula " +
+             "LEFT JOIN Especialidades es ON d.id_especialidad = es.IdEspecialidad " +
              "WHERE c.id_paciente = ? " +
-             "ORDER BY e.id_evolucion DESC, c.fecha DESC, c.hora DESC";
+             "ORDER BY c.fecha DESC, c.hora DESC, e.id_evolucion DESC";
     
     try (Connection conn = ConexionSQLServer.conectar();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {

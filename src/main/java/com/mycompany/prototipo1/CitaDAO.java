@@ -76,6 +76,83 @@ public class CitaDAO {
         
     }
     
+    public static Map<String, String> obtenerPacienteConCitaMasProximaEnfermero(String cedulaEnfermero) {
+    Map<String, String> datosPaciente = new HashMap<>();
+    String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.estado_civil, p.sangre, p.telefono, " +
+                 "p.fecha_nacimiento, p.sexo, p.edad, p.correo, p.alergias, c.fecha, c.hora, c.id_cita, " +
+                 "c.motivo, c.peso, c.estatura, c.presion_sistolica, c.presion_diastolica, c.frecuencia_cardiaca " +
+                 "FROM Cita c " +
+                 "INNER JOIN Paciente p ON c.id_paciente = p.cedula " +
+                 "INNER JOIN Enfermero e ON c.id_enfermero = e.cedula " +
+                 "WHERE e.cedula = ? " + 
+                 "AND (c.fecha > CAST(GETDATE() AS DATE) OR (c.fecha = CAST(GETDATE() AS DATE) AND c.hora >= CAST(GETDATE() AS TIME))) " +
+                 "ORDER BY c.fecha ASC, c.hora ASC";
+
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, cedulaEnfermero);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaNacimiento = "";
+            if (rs.getDate("fecha_nacimiento") != null) {
+                fechaNacimiento = sdf.format(rs.getDate("fecha_nacimiento"));
+            }
+            
+            // Datos básicos del paciente
+            datosPaciente.put("cedula", rs.getString("cedula"));
+            datosPaciente.put("nombres", rs.getString("nombres"));
+            datosPaciente.put("apellidos", rs.getString("apellidos"));
+            datosPaciente.put("fecha_nacimiento", fechaNacimiento);
+            datosPaciente.put("sexo", rs.getString("sexo"));
+            datosPaciente.put("correo", rs.getString("correo"));
+            datosPaciente.put("alergias", rs.getString("alergias"));
+            datosPaciente.put("edad", rs.getString("edad"));
+            datosPaciente.put("telefono", rs.getString("telefono"));
+            datosPaciente.put("estado_civil", rs.getString("estado_civil"));
+            datosPaciente.put("sangre", rs.getString("sangre"));
+            
+            // Datos de la cita
+            datosPaciente.put("fecha", rs.getString("fecha"));
+            datosPaciente.put("hora", rs.getString("hora"));
+            datosPaciente.put("id_cita", rs.getString("id_cita"));
+            datosPaciente.put("motivo", rs.getString("motivo"));
+            datosPaciente.put("peso", rs.getString("peso"));
+            datosPaciente.put("estatura", rs.getString("estatura"));
+            datosPaciente.put("presion_sistolica", rs.getString("presion_sistolica"));
+            datosPaciente.put("presion_diastolica", rs.getString("presion_diastolica"));
+            datosPaciente.put("frecuencia_cardiaca", rs.getString("frecuencia_cardiaca"));
+            
+            // Formatear fechas
+            if (rs.getDate("fecha") != null) {
+                datosPaciente.put("fecha_cita", sdf.format(rs.getDate("fecha")));
+            }
+            if (rs.getTime("hora") != null) {
+                datosPaciente.put("hora_cita", rs.getTime("hora").toString());
+            }
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error en la consulta SQL: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error: Driver JDBC no encontrado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    
+    System.out.println("*******************");
+    System.out.println("Datos encontrados para enfermero: " + datosPaciente);
+    return datosPaciente;
+}
+    
 
 public static List<ConsultaPrevia> obtenerConsultasPrevias(String cedulaPaciente) {
     List<ConsultaPrevia> consultas = new ArrayList<>();

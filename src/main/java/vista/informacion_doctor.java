@@ -528,15 +528,15 @@ private void limpiarTablaAntecedentes() {
         jButton2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTEvolucion = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        jPInternaciones = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTableInternaciones = new javax.swing.JTable();
+        jPbuscarpaciente = new javax.swing.JPanel();
         jcbbusqueda = new javax.swing.JComboBox<>();
         jtfbusqueda = new javax.swing.JTextField();
         jbbuscar = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTableResultados = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTableInternaciones = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1164,6 +1164,38 @@ private void limpiarTablaAntecedentes() {
 
         jtpinformacionpaciente.addTab("Evolución", jPEvolucion);
 
+        jTableInternaciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID Internación", "Tipo", "Nivel de cuidado", "Fecha Apertura", "Diagnóstico"
+            }
+        ));
+        jScrollPane7.setViewportView(jTableInternaciones);
+
+        javax.swing.GroupLayout jPInternacionesLayout = new javax.swing.GroupLayout(jPInternaciones);
+        jPInternaciones.setLayout(jPInternacionesLayout);
+        jPInternacionesLayout.setHorizontalGroup(
+            jPInternacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPInternacionesLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        jPInternacionesLayout.setVerticalGroup(
+            jPInternacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPInternacionesLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(471, Short.MAX_VALUE))
+        );
+
+        jtpinformacionpaciente.addTab("Internaciones", jPInternaciones);
+
         jcbbusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula", "Nombre" }));
 
         jbbuscar.setText("Buscar");
@@ -1191,11 +1223,11 @@ private void limpiarTablaAntecedentes() {
         });
         jScrollPane6.setViewportView(jTableResultados);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPbuscarpacienteLayout = new javax.swing.GroupLayout(jPbuscarpaciente);
+        jPbuscarpaciente.setLayout(jPbuscarpacienteLayout);
+        jPbuscarpacienteLayout.setHorizontalGroup(
+            jPbuscarpacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPbuscarpacienteLayout.createSequentialGroup()
                 .addGap(219, 219, 219)
                 .addComponent(jcbbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
@@ -1203,16 +1235,16 @@ private void limpiarTablaAntecedentes() {
                 .addGap(27, 27, 27)
                 .addComponent(jbbuscar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPbuscarpacienteLayout.createSequentialGroup()
                 .addContainerGap(110, Short.MAX_VALUE)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jPbuscarpacienteLayout.setVerticalGroup(
+            jPbuscarpacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPbuscarpacienteLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPbuscarpacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtfbusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbbuscar))
@@ -1221,39 +1253,7 @@ private void limpiarTablaAntecedentes() {
                 .addContainerGap(298, Short.MAX_VALUE))
         );
 
-        jtpinformacionpaciente.addTab("Buscar paciente", jPanel3);
-
-        jTableInternaciones.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID Internación", "Tipo", "Nivel de cuidado", "Fecha Apertura", "Diagnóstico"
-            }
-        ));
-        jScrollPane7.setViewportView(jTableInternaciones);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(471, Short.MAX_VALUE))
-        );
-
-        jtpinformacionpaciente.addTab("Internaciones", jPanel4);
+        jtpinformacionpaciente.addTab("Buscar paciente", jPbuscarpaciente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -2074,13 +2074,13 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JPanel jPEvolucion;
     private javax.swing.JPanel jPHistoriaClinica;
     private javax.swing.JPanel jPInformacionPaciente;
+    private javax.swing.JPanel jPInternaciones;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelConsultasContainer;
+    private javax.swing.JPanel jPbuscarpaciente;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

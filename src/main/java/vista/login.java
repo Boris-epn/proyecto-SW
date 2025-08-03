@@ -123,6 +123,31 @@ public class login extends javax.swing.JFrame {
     java.util.Arrays.fill(passwordChars, ' ');
     
     try (Connection conn = ConexionSQLServer.conectar()) {
+        // Buscar en Enfermeros
+String enfermeroQuery = "SELECT cedula, contrasena_enfermero, nombres, apellidos FROM Enfermero WHERE cedula = ?";
+try (PreparedStatement stmt = conn.prepareStatement(enfermeroQuery)) {
+    stmt.setString(1, usuario);
+    ResultSet rs = stmt.executeQuery();
+    
+    if (rs.next()) {
+        String dbPassword = rs.getString("contrasena_enfermero");
+        if (dbPassword != null && dbPassword.equals(contrasena)) {
+            String cedulaEnfermero = rs.getString("cedula");
+            String nombres = rs.getString("nombres");
+            String apellidos = rs.getString("apellidos");
+            
+            JOptionPane.showMessageDialog(this, 
+                "Acceso concedido como enfermero: " + nombres + " " + apellidos,
+                "Autenticación exitosa", 
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            informacion_enfermero enfermeroView = new informacion_enfermero(cedulaEnfermero);
+            enfermeroView.setVisible(true);
+            this.dispose(); // Cerrar ventana de login
+            return;
+        }
+    }
+}
         // Buscar en Pacientes
         String pacienteQuery = "SELECT cedula, contrasena_paciente FROM Paciente WHERE cedula = ?";
         try (PreparedStatement stmt = conn.prepareStatement(pacienteQuery)) {
@@ -160,6 +185,8 @@ public class login extends javax.swing.JFrame {
                 }
             }
         }
+        
+        
         
         // Si no coincide en ninguna tabla
         JOptionPane.showMessageDialog(this, 

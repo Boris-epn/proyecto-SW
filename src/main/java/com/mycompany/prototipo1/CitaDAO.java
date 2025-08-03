@@ -12,7 +12,7 @@ import java.util.List;
 public class CitaDAO {
     public static Map<String, String> obtenerPacienteConCitaMasProxima(String cedulaDoctor) {
         Map<String, String> datosPaciente = new HashMap<>();
-        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.estado_civil, p.sangre, p.telefono, " +
+        String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.estado_civil, p.tipo_identificador, p.sangre, p.telefono, " +
              "p.fecha_nacimiento, p.sexo, p.edad, p.correo, p.alergias, c.fecha, c.hora,c.id_cita " +
              "FROM Cita c " +
              "INNER JOIN Paciente p ON c.id_paciente = p.cedula " +
@@ -46,6 +46,7 @@ public class CitaDAO {
                 datosPaciente.put("fecha", rs.getString("fecha"));
                 datosPaciente.put("hora", rs.getString("hora"));
                 datosPaciente.put("id_cita", rs.getString("id_cita"));
+                datosPaciente.put("tipo_identificador", rs.getString("tipo_identificador"));
                 
                 
                 
@@ -78,7 +79,7 @@ public class CitaDAO {
     
     public static Map<String, String> obtenerPacienteConCitaMasProximaEnfermero(String cedulaEnfermero) {
     Map<String, String> datosPaciente = new HashMap<>();
-    String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.estado_civil, p.sangre, p.telefono, " +
+    String sql = "SELECT TOP 1 p.cedula, p.nombres, p.apellidos, p.estado_civil, p.tipo_identificador, p.sangre, p.telefono, " +
                  "p.fecha_nacimiento, p.sexo, p.edad, p.correo, p.alergias, c.fecha, c.hora, c.id_cita, " +
                  "c.motivo, c.peso, c.estatura, c.presion_sistolica, c.presion_diastolica, c.frecuencia_cardiaca " +
                  "FROM Cita c " +
@@ -124,6 +125,7 @@ public class CitaDAO {
             datosPaciente.put("presion_sistolica", rs.getString("presion_sistolica"));
             datosPaciente.put("presion_diastolica", rs.getString("presion_diastolica"));
             datosPaciente.put("frecuencia_cardiaca", rs.getString("frecuencia_cardiaca"));
+            datosPaciente.put("tipo_identificador",rs.getString("tipo_identificador"));
             
             // Formatear fechas
             if (rs.getDate("fecha") != null) {

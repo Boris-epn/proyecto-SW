@@ -74,7 +74,7 @@ public class informacion_paciente extends javax.swing.JFrame {
             this.jTFTelefono1.setText(datosPaciente.get("telefono"));
             this.jCBEstadoCivil.setSelectedItem(datosPaciente.get("estado_civil"));
             this.jTFSangre.setText(datosPaciente.get("sangre"));
-            
+            this.jCBTipoIdentificador.setSelectedItem(datosPaciente.getOrDefault("tipo_identificador", ""));
         } catch (Exception e) {
             logger.log(java.util.logging.Level.SEVERE, "Error al mostrar datos del paciente", e);
             JOptionPane.showMessageDialog(this, 
@@ -205,6 +205,7 @@ public class informacion_paciente extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jTFTelefono1 = new javax.swing.JTextField();
+        jCBTipoIdentificador = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jPHistoriaClinica = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -234,7 +235,7 @@ public class informacion_paciente extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Cédula");
+        jLabel3.setText("Identificador");
 
         jTFCedula.setEditable(false);
         jTFCedula.addActionListener(new java.awt.event.ActionListener() {
@@ -305,27 +306,26 @@ public class informacion_paciente extends javax.swing.JFrame {
             }
         });
 
+        jCBTipoIdentificador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula", "Otro" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(271, 271, 271)
+                .addGap(302, 302, 302)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jLabel1))
-                                        .addGap(78, 78, 78))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel3)))
+                                .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTFNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTFApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -350,7 +350,9 @@ public class informacion_paciente extends javax.swing.JFrame {
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jTFSangre, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 274, Short.MAX_VALUE)))
+                        .addGap(31, 31, 31)
+                        .addComponent(jCBTipoIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 140, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -366,8 +368,9 @@ public class informacion_paciente extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCBTipoIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -585,6 +588,7 @@ public class informacion_paciente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jCBEstadoCivil;
+    private javax.swing.JComboBox<String> jCBTipoIdentificador;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

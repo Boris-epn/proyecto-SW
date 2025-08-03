@@ -266,6 +266,7 @@ public class informacion_doctor extends javax.swing.JFrame {
             jTFCorreo.setText(datosPaciente.getOrDefault("correo", ""));
             this.jTFEdad.setText(datosPaciente.getOrDefault("edad", ""));
             this.jTFTelefono.setText(datosPaciente.getOrDefault("telefono", ""));
+            this.jCBTipoIdentificador.setSelectedItem(datosPaciente.getOrDefault("tipo_identificador", ""));
         if(datosPaciente.get("estado_civil") == ""){
             System.out.println(" no se ha escogido estado civil");
         }else if(datosPaciente.get("estado_civil")=="Casado/a"){
@@ -486,6 +487,7 @@ private void limpiarTablaAntecedentes() {
         jBEditarContacto = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jTFApellidosContacto = new javax.swing.JTextField();
+        jCBTipoIdentificador = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -558,7 +560,7 @@ private void limpiarTablaAntecedentes() {
             }
         });
 
-        jLabel3.setText("Cédula");
+        jLabel3.setText("Identificador");
 
         jTFCedula.setEditable(false);
         jTFCedula.addActionListener(new java.awt.event.ActionListener() {
@@ -713,49 +715,56 @@ private void limpiarTablaAntecedentes() {
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
+        jCBTipoIdentificador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cédula", "Otro" }));
+
         javax.swing.GroupLayout jPInformacionPacienteLayout = new javax.swing.GroupLayout(jPInformacionPaciente);
         jPInformacionPaciente.setLayout(jPInformacionPacienteLayout);
         jPInformacionPacienteLayout.setHorizontalGroup(
             jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPInformacionPacienteLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(41, Short.MAX_VALUE)
                 .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionPacienteLayout.createSequentialGroup()
-                        .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPInformacionPacienteLayout.createSequentialGroup()
-                                .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(46, 46, 46)
-                                .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTFNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                                    .addComponent(jTFApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                                    .addComponent(jTFFechaNacimiento)
-                                    .addComponent(jTFCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                                    .addComponent(jTFGenero)
-                                    .addComponent(jTFCorreo)
-                                    .addComponent(jTFEdad)
-                                    .addComponent(jCBEstadoCivil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTFTelefono)))
-                            .addComponent(jLabel4)
-                            .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(207, 207, 207))
+                        .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(375, 375, 375))
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionPacienteLayout.createSequentialGroup()
-                        .addComponent(jbeditar)
-                        .addGap(406, 406, 406))))
+                        .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPInformacionPacienteLayout.createSequentialGroup()
+                                    .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6)
+                                        .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(46, 46, 46)
+                                    .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jTFNombres)
+                                        .addComponent(jTFApellidos)
+                                        .addComponent(jTFFechaNacimiento)
+                                        .addComponent(jTFCedula)
+                                        .addComponent(jTFGenero)
+                                        .addComponent(jTFCorreo)
+                                        .addComponent(jTFEdad)
+                                        .addComponent(jCBEstadoCivil, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jTFTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel4)
+                                .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.LEADING)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPInformacionPacienteLayout.createSequentialGroup()
+                                .addComponent(jbeditar)
+                                .addGap(199, 199, 199)))
+                        .addGap(57, 57, 57)
+                        .addComponent(jCBTipoIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(148, 148, 148))))
         );
         jPInformacionPacienteLayout.setVerticalGroup(
             jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPInformacionPacienteLayout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(47, 47, 47)
                 .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTFNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -766,7 +775,8 @@ private void limpiarTablaAntecedentes() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTFCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCBTipoIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPInformacionPacienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -796,7 +806,7 @@ private void limpiarTablaAntecedentes() {
                     .addComponent(jTFTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jbeditar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(145, 145, 145)
                 .addComponent(jLabel42)
@@ -998,7 +1008,7 @@ private void limpiarTablaAntecedentes() {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addComponent(jLabel19)))
-                .addContainerGap(269, Short.MAX_VALUE))
+                .addContainerGap(727, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Anamnesis", jPanel1);
@@ -1023,7 +1033,7 @@ private void limpiarTablaAntecedentes() {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -1045,7 +1055,7 @@ private void limpiarTablaAntecedentes() {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 856, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -1056,7 +1066,7 @@ private void limpiarTablaAntecedentes() {
                 .addContainerGap())
         );
 
-        jLabel12.setText("tipo de sangre");
+        jLabel12.setText("Tipo de Sangre");
 
         jTFSangre.setEditable(false);
 
@@ -1100,7 +1110,7 @@ private void limpiarTablaAntecedentes() {
                 .addComponent(jButton1)
                 .addGap(97, 97, 97)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(505, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Historia clínica", jPHistoriaClinica);
@@ -1149,7 +1159,7 @@ private void limpiarTablaAntecedentes() {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPEvolucionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 904, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPEvolucionLayout.setVerticalGroup(
@@ -1159,7 +1169,7 @@ private void limpiarTablaAntecedentes() {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59)
                 .addComponent(jButton2)
-                .addContainerGap(289, Short.MAX_VALUE))
+                .addContainerGap(747, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Evolución", jPEvolucion);
@@ -1184,14 +1194,14 @@ private void limpiarTablaAntecedentes() {
             .addGroup(jPInternacionesLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         jPInternacionesLayout.setVerticalGroup(
             jPInternacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPInternacionesLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(471, Short.MAX_VALUE))
+                .addContainerGap(929, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Internaciones", jPInternaciones);
@@ -1236,7 +1246,7 @@ private void limpiarTablaAntecedentes() {
                 .addComponent(jbbuscar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPbuscarpacienteLayout.createSequentialGroup()
-                .addContainerGap(110, Short.MAX_VALUE)
+                .addContainerGap(136, Short.MAX_VALUE)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65))
         );
@@ -1250,7 +1260,7 @@ private void limpiarTablaAntecedentes() {
                     .addComponent(jbbuscar))
                 .addGap(42, 42, 42)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(298, Short.MAX_VALUE))
+                .addContainerGap(756, Short.MAX_VALUE))
         );
 
         jtpinformacionpaciente.addTab("Buscar paciente", jPbuscarpaciente);
@@ -1364,6 +1374,7 @@ private void limpiarTablaAntecedentes() {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         evolucion vistaEvolucion = new evolucion(this.id_cita);
         vistaEvolucion.setVisible(true);
+        cargarDatosDelPaciente();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTFTemperaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFTemperaturaActionPerformed
@@ -2040,6 +2051,7 @@ private boolean guardarCambiosContacto() {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jCBEstadoCivil;
+    private javax.swing.JComboBox<String> jCBTipoIdentificador;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

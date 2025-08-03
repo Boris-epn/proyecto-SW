@@ -74,7 +74,7 @@ public class PacienteDAO {
     public static Map<String, String> obtenerInformacionPacientePorCedula(String cedulaPaciente) {
     Map<String, String> datosPaciente = new HashMap<>();
     String sql = "SELECT p.cedula, p.nombres, p.apellidos, p.estado_civil, p.sangre, p.telefono, " +
-                 "p.fecha_nacimiento, p.sexo, p.edad, p.correo, p.alergias " +
+                 "p.fecha_nacimiento, p.sexo, p.edad, p.correo, p.alergias,p.tipo_identificador " +
                  "FROM Paciente p " +
                  "WHERE p.cedula = ?";
     
@@ -102,6 +102,7 @@ public class PacienteDAO {
             datosPaciente.put("telefono", rs.getString("telefono"));
             datosPaciente.put("estado_civil", rs.getString("estado_civil"));
             datosPaciente.put("sangre", rs.getString("sangre"));
+            datosPaciente.put("tipo_identificador", rs.getString("tipo_identificador"));
         }
         
     } catch (SQLException e) {

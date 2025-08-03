@@ -61,45 +61,52 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <EmptySpace pref="41" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel26" alignment="0" min="-2" pref="43" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jLabel42" alignment="0" min="-2" pref="43" max="-2" attributes="0"/>
-                                          <Component id="jTFNombres" alignment="0" pref="211" max="32767" attributes="0"/>
-                                          <Component id="jTFApellidos" alignment="0" pref="211" max="32767" attributes="0"/>
-                                          <Component id="jTFFechaNacimiento" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTFCedula" alignment="0" pref="211" max="32767" attributes="0"/>
-                                          <Component id="jTFGenero" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTFCorreo" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTFEdad" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jCBEstadoCivil" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTFTelefono" alignment="0" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="jLabel8" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jLabel27" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace min="-2" pref="207" max="-2" attributes="0"/>
+                              <Component id="jLabel42" min="-2" pref="43" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="375" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jPanel2" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="jbeditar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="406" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel26" alignment="0" min="-2" pref="43" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jTFNombres" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFApellidos" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFFechaNacimiento" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFCedula" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFGenero" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFCorreo" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFEdad" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jCBEstadoCivil" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jTFTelefono" alignment="0" min="-2" pref="211" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="jLabel8" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="jbeditar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="199" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                              <Component id="jCBTipoIdentificador" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -108,7 +115,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTFNombres" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -122,6 +129,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTFCedula" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCBTipoIdentificador" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -138,7 +146,7 @@
                               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jTFCorreo" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -160,7 +168,7 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jbeditar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="145" max="-2" attributes="0"/>
                       <Component id="jLabel42" min="-2" max="-2" attributes="0"/>
@@ -198,7 +206,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="C&#xe9;dula"/>
+                <Property name="text" type="java.lang.String" value="Identificador"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTFCedula">
@@ -422,6 +430,19 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JComboBox" name="jCBTipoIdentificador">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="2">
+                    <StringItem index="0" value="C&#xe9;dula"/>
+                    <StringItem index="1" value="Otro"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel1">
@@ -569,7 +590,7 @@
                               <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="269" max="32767" attributes="0"/>
+                      <EmptySpace pref="727" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -789,7 +810,7 @@
                       <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
                       <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="47" max="32767" attributes="0"/>
+                      <EmptySpace pref="505" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -808,7 +829,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="862" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="888" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -879,7 +900,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" pref="856" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="882" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -911,7 +932,7 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel12">
               <Properties>
-                <Property name="text" type="java.lang.String" value="tipo de sangre"/>
+                <Property name="text" type="java.lang.String" value="Tipo de Sangre"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTFSangre">
@@ -951,7 +972,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" pref="878" max="32767" attributes="0"/>
+                      <Component id="jScrollPane3" pref="904" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -963,7 +984,7 @@
                       <Component id="jScrollPane3" min="-2" pref="341" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="289" max="32767" attributes="0"/>
+                      <EmptySpace pref="747" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1025,7 +1046,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                       <Component id="jScrollPane7" min="-2" pref="764" max="-2" attributes="0"/>
-                      <EmptySpace pref="80" max="32767" attributes="0"/>
+                      <EmptySpace pref="106" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1034,7 +1055,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Component id="jScrollPane7" min="-2" pref="255" max="-2" attributes="0"/>
-                      <EmptySpace pref="471" max="32767" attributes="0"/>
+                      <EmptySpace pref="929" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1115,7 +1136,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="110" max="32767" attributes="0"/>
+                      <EmptySpace pref="136" max="32767" attributes="0"/>
                       <Component id="jScrollPane6" min="-2" pref="715" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                   </Group>
@@ -1132,7 +1153,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                       <Component id="jScrollPane6" min="-2" pref="348" max="-2" attributes="0"/>
-                      <EmptySpace pref="298" max="32767" attributes="0"/>
+                      <EmptySpace pref="756" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

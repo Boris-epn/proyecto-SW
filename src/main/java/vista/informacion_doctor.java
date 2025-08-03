@@ -1231,7 +1231,7 @@ private void limpiarTablaAntecedentes() {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID Internaci[ón", "Tipo", "Nivel de cuidado", "Fecha Apertura", "Diagnóstico"
+                "ID Internación", "Tipo", "Nivel de cuidado", "Fecha Apertura", "Diagnóstico"
             }
         ));
         jScrollPane7.setViewportView(jTableInternaciones);

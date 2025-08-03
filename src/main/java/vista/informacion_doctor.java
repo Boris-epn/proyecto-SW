@@ -28,6 +28,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -161,6 +163,34 @@ public class informacion_doctor extends javax.swing.JFrame {
         this.jTFTelefono.setText(datos.getOrDefault("telefono", ""));
         this.id_cita = Integer.parseInt(datos.getOrDefault("id_cita", "0"));
         this.jTFSangre.setText(datos.getOrDefault("sangre", ""));
+        this.jCBEstadoCivil.setSelectedItem(datos.get("estado_civil"));
+      
+        cargarAntecedentes();
+        cargarConsultasPrevias();
+        cargarEvolucion();
+
+    } else {
+        limpiarCamposPaciente(); 
+        cargarEvolucion();
+    }
+}
+ private void cargarDatosDelPacienteCedula() {
+    Map<String, String> datos = PacienteDAO.obtenerInformacionPacientePorCedula(cedulaPaciente);
+    
+    if (datos != null && !datos.isEmpty()) {
+        this.cedulaPaciente = datos.get("cedula");
+
+        // --- Panel de Información del paciente ---
+        jTFNombres.setText(datos.getOrDefault("nombres", ""));
+        jTFApellidos.setText(datos.getOrDefault("apellidos", ""));
+        this.jTFEdad.setText(datos.getOrDefault("edad", ""));
+        this.jTFCedula.setText(datos.getOrDefault("cedula", ""));
+        this.jTFFechaNacimiento.setText(datos.getOrDefault("fecha_nacimiento", ""));
+        this.jTFGenero.setText(datos.getOrDefault("sexo", ""));
+        this.jTFCorreo.setText(datos.getOrDefault("correo", ""));
+        this.jTFTelefono.setText(datos.getOrDefault("telefono", ""));
+        this.id_cita = Integer.parseInt(datos.getOrDefault("id_cita", "0"));
+        this.jTFSangre.setText(datos.getOrDefault("sangre", ""));
         if(datos.get("estado_civil") == ""){
             System.out.println(" no se ha escogido estado civil");
         }else if(datos.get("estado_civil")=="Casado/a"){
@@ -174,28 +204,17 @@ public class informacion_doctor extends javax.swing.JFrame {
             this.jCBEstadoCivil.setSelectedIndex(3);
         }
        
-        // ... (resto de campos de información del paciente) ...
-
-        // --- Panel de Evolución ---
-        // Asumiendo que tus campos de texto se llaman así:
-        
-
-        // --- Carga de datos secundarios ---
         cargarAntecedentes();
         cargarConsultasPrevias();
         cargarEvolucion();
 
     } else {
-        // ... (código para limpiar los campos) ...
-        limpiarCamposPaciente(); // Llama al método de limpieza
+        limpiarCamposPaciente(); 
         cargarEvolucion();
     }
 }
 
-    // Los métodos cargarAntecedentes(), cargarConsultasPrevias(), limpiar... 
-    // y el resto de la clase se mantienen como estaban, pero ahora son llamados
-    // desde el nuevo método centralizado 'cargarDatosDelPaciente()'.
-    // ...
+   
     private void cargarPacienteConCitaProxima() {
         Map<String, String> datosPaciente = CitaDAO.obtenerPacienteConCitaMasProxima(cedulaDoctor);
         
@@ -266,7 +285,7 @@ private void cargarAntecedentes() {
         return;
     }
 
-    // Llamamos al DAO actualizado
+    
     Map<String, String> antecedentes = AntecedentesDAO.obtenerAntecedentesPorPaciente(this.cedulaPaciente);
 
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -338,6 +357,42 @@ private void cargarConsultasPrevias() {
     jPanelConsultasContainer.revalidate();
     jPanelConsultasContainer.repaint();
 }
+/**
+ * Obtiene el número de cédula de la fila seleccionada en la tabla de resultados
+ * @return String con el número de cédula o null si no hay fila seleccionada
+ */
+public String obtenerCedulaSeleccionada() {
+    // Verificar si hay una fila seleccionada en la tabla
+    int filaSeleccionada = jTableResultados.getSelectedRow();
+    
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this,
+            "No hay ninguna fila seleccionada",
+            "Advertencia",
+            JOptionPane.WARNING_MESSAGE);
+        return null;
+    }
+    
+    // Obtener el modelo de la tabla
+    DefaultTableModel modelo = (DefaultTableModel) jTableResultados.getModel();
+    
+    // Asumimos que la cédula está en la primera columna (índice 0)
+    // Si está en otra columna, ajusta el índice
+    Object valorCedula = modelo.getValueAt(filaSeleccionada, 0);
+    
+    // Verificar que el valor no sea nulo
+    if (valorCedula == null) {
+        JOptionPane.showMessageDialog(this,
+            "La cédula en la fila seleccionada está vacía",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        return null;
+    }
+    
+    // Convertir a String y retornar
+    return valorCedula.toString();
+}
+
 private void limpiarTablaAntecedentes() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     // Limpia todas las filas
@@ -429,6 +484,7 @@ private void limpiarTablaAntecedentes() {
         jPanelConsultasContainer = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jTFSangre = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jPEvolucion = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -932,8 +988,8 @@ private void limpiarTablaAntecedentes() {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Consultas previas"));
@@ -962,6 +1018,13 @@ private void limpiarTablaAntecedentes() {
 
         jTFSangre.setEditable(false);
 
+        jButton1.setText("Agregar antecedente");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPHistoriaClinicaLayout = new javax.swing.GroupLayout(jPHistoriaClinica);
         jPHistoriaClinica.setLayout(jPHistoriaClinicaLayout);
         jPHistoriaClinicaLayout.setHorizontalGroup(
@@ -977,6 +1040,10 @@ private void limpiarTablaAntecedentes() {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jPHistoriaClinicaLayout.createSequentialGroup()
+                .addGap(358, 358, 358)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPHistoriaClinicaLayout.setVerticalGroup(
             jPHistoriaClinicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -988,6 +1055,8 @@ private void limpiarTablaAntecedentes() {
                 .addGap(24, 24, 24)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(97, 97, 97)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(47, Short.MAX_VALUE))
         );
@@ -1073,6 +1142,11 @@ private void limpiarTablaAntecedentes() {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableResultados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableResultadosMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(jTableResultados);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -1176,22 +1250,41 @@ private void limpiarTablaAntecedentes() {
             break;
         }
         
-        if (bandera == true){
-            String criterio = (String) jcbbusqueda.getSelectedItem();
-        String valor = jtfbusqueda.getText().trim();
+        if (bandera == true) {
+    String criterio = (String) jcbbusqueda.getSelectedItem();
+    String valor = jtfbusqueda.getText().trim();
 
-        if (valor.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
-            return;
-     }
+    if (valor.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda.", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
     
-        DefaultTableModel model = PacienteDAO.buscarPacientes(criterio, valor);
-        jTableResultados.setModel(model); 
+    DefaultTableModel model = PacienteDAO.buscarPacientes(criterio, valor);
+    jTableResultados.setModel(model); 
     
-        if (model.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "No se encontraron pacientes que coincidan con la búsqueda.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
-        }
-        }
+    if (model.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this, "No se encontraron pacientes que coincidan con la búsqueda.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        // Agregar listener para cuando se seleccione una fila
+        jTableResultados.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                String cedulaSeleccionada = obtenerCedulaSeleccionada();
+                if (cedulaSeleccionada != null) {
+                    // Aquí puedes usar la cédula para lo que necesites
+                    System.out.println("Cédula seleccionada: " + cedulaSeleccionada);
+                    this.cedulaPaciente = cedulaSeleccionada;
+                    cargarDatosDelPacienteCedula();
+                    cargarEvolucion();
+                    configurarValidaciones();
+                    cargarDatosContacto();
+                    cargarDatosAnamnesis();
+                    
+                    
+                }
+            }
+        });
+    }
+}
     }//GEN-LAST:event_jbbuscarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1351,6 +1444,29 @@ private void limpiarTablaAntecedentes() {
     private void jTFNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFNombresActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFNombresActionPerformed
+
+    private void jTableResultadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableResultadosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTableResultadosMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Map<String, String> antecedentes = AntecedentesDAO.obtenerAntecedentesPorPaciente(this.cedulaPaciente);
+        String familiares = antecedentes.getOrDefault("familiares","");
+        String patologicos = antecedentes.getOrDefault("patologicos", "");
+        String fisiologicos = antecedentes.getOrDefault("fisiologicos","");
+        String enfermedades_actuales = antecedentes.getOrDefault("enfermedades_actuales", "");
+        Antecedentes antecedentesvista = new Antecedentes(familiares,patologicos,fisiologicos,enfermedades_actuales,this.cedulaPaciente);
+        antecedentesvista.setVisible(true);
+        antecedentesvista.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosed(WindowEvent e) {
+        // Cuando la ventana se cierra, cargar los antecedentes actualizados
+        cargarAntecedentes();
+        }
+});
+        
+                
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void configurarValidaciones() {
     // Configurar validación para todos los campos editables
@@ -1847,6 +1963,7 @@ private boolean guardarCambiosContacto() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBEditarContacto;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jCBEstadoCivil;
     private javax.swing.JLabel jLabel1;

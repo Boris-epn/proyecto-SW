@@ -5,7 +5,13 @@
 package vista;
 
 import com.mycompany.prototipo1.CitaDAO;
+import com.mycompany.prototipo1.ConexionSQLServer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,7 +38,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
         informacion(this.cedulaEnfermero);
         cargarDatosDelPaciente();
         cargarDatosContacto();
-        cargarDatosAnamnesis();
+        cargarDatosAnamnesis(this.cedulaPaciente);
         this.setLocationRelativeTo(this);
         
     }
@@ -102,7 +108,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
     jTFApellidosContacto.setEditable(false);
     jTFTelefonoContacto.setEditable(false); // Nuevo campo
 }
-   private void cargarDatosAnamnesis() {
+   private void cargarDatosAnamnesis(String cedulaPaciente1) {
     Map<String, String> datos = CitaDAO.obtenerAnamnesis(cedulaPaciente);
     
     if (datos != null && !datos.isEmpty()) {
@@ -119,6 +125,159 @@ public class informacion_enfermero extends javax.swing.JFrame {
         this.jTFOxigenacion.setText(datos.getOrDefault("oxigenacion", ""));
         this.jTAMotivo.setText(datos.getOrDefault("motivo", ""));
         this.jTAMotivo.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
+    }
+}
+   private boolean actualizarAnamnesisYCita() {
+    // Primero obtenemos el id_anamnesis de la cita actual
+    String obtenerIdAnamnesis = "SELECT id_anamnesis FROM Cita WHERE id_cita = ?";
+    int idAnamnesis = -1;
+    
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(obtenerIdAnamnesis)) {
+        
+        pstmt.setInt(1, this.id_cita);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            idAnamnesis = rs.getInt("id_anamnesis");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró la cita especificada", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+    } catch (SQLException | ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(this, "Error al obtener datos de la cita: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return false;
+    }
+    
+    // Si no tiene anamnesis asociada, creamos una nueva
+    if (idAnamnesis == -1) {
+        String insertAnamnesis = "INSERT INTO Anamnesis ( id_historiaClinica, " +
+                                "estatura, presion_sistolica, presion_diastolica, peso, frecuencia_cardiaca, examen_fisico, temperatura, oxigenacion) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); " +
+                                "UPDATE Cita SET id_anamnesis = SCOPE_IDENTITY()" +"motivo = ?"+
+                                "WHERE id_cita = ?";
+        
+        try (Connection conn = ConexionSQLServer.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(insertAnamnesis)) {
+            
+            
+            pstmt.setInt(1, obtenerIdHistoriaClinica(this.id_cita)); 
+            pstmt.setDouble(2, Double.parseDouble(this.jTFEstatura.getText()));
+            pstmt.setInt(3, Integer.parseInt(this.jTFPresionSistolica.getText()));
+            pstmt.setInt(4, Integer.parseInt(this.jTFPresionDiastolica.getText()));
+            pstmt.setDouble(5, Double.parseDouble(this.jTFPeso.getText()));
+            pstmt.setInt(6, Integer.parseInt(this.jTFFrecuenciaCardiaca.getText()));
+            
+            pstmt.setString(7, this.jTAExamenFisico.getText());
+            pstmt.setInt(8, Integer.parseInt(this.jTFTemperatura.getText()));
+            
+            
+            pstmt.setInt(9, Integer.parseInt(this.jTFOxigenacion.getText()));
+            pstmt.setString(10, this.jTAMotivo.getText());
+            pstmt.setInt(11, this.id_cita);
+            
+            int filasAfectadas = pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Cambios guardados con éxito","Guardar",JOptionPane.INFORMATION_MESSAGE);
+            return filasAfectadas > 0;
+                
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Error al crear nueva anamnesis: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false;
+        }
+    } else {
+        String sql = "BEGIN TRANSACTION; " +
+                     "UPDATE Anamnesis SET " +
+                     "estatura = ?, " +
+                     "presion_sistolica = ?, " +
+                     "presion_diastolica = ?, " +
+                     "peso = ?, " +
+                     "frecuencia_cardiaca = ?, " +
+                     "examen_fisico = ?, " +
+                     "temperatura = ?, " +
+                     "oxigenacion = ? " +
+                     "WHERE id_anamnesis = ?; " +
+                     
+                     "UPDATE Cita SET " +
+                     "motivo = ? " +
+                     "WHERE id_cita = ?; " +
+                     "COMMIT;";
+        
+        try (Connection conn = ConexionSQLServer.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            
+               pstmt.setDouble(1, Double.parseDouble(this.jTFEstatura.getText()));
+            
+                   pstmt.setInt(2, Integer.parseInt(this.jTFPresionSistolica.getText()));
+                    
+                    pstmt.setInt(3, Integer.parseInt(this.jTFPresionDiastolica.getText()));
+                
+                pstmt.setDouble(4, Double.parseDouble(this.jTFPeso.getText()));
+                
+                pstmt.setInt(5, Integer.parseInt(this.jTFFrecuenciaCardiaca.getText()));
+                
+                    pstmt.setString(6, this.jTAExamenFisico.getText());
+                        pstmt.setInt(7, Integer.parseInt(this.jTFTemperatura.getText()));
+                    pstmt.setInt(8, Integer.parseInt(this.jTFOxigenacion.getText()));
+                pstmt.setInt(9, idAnamnesis);
+            
+            
+            pstmt.setString(10, this.jTAMotivo.getText()); 
+            pstmt.setInt(11, this.id_cita);
+            
+            int filasAfectadas = pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Cambios guardados con éxito","Guardar",JOptionPane.INFORMATION_MESSAGE);
+            return filasAfectadas > 0;
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
+
+// Método auxiliar para obtener id_historiaClinica (debes implementarlo según tu esquema)
+private int obtenerIdHistoriaClinica(int idCita) {
+    String sql = "SELECT p.id_historiaClinica " +
+                 "FROM Cita c " +
+                 "JOIN Paciente p ON c.id_paciente = p.cedula " +
+                 "WHERE c.id_cita = ?";
+    
+    try (Connection conn = ConexionSQLServer.conectar();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, idCita);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            return rs.getInt("id_historiaClinica");
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "No se encontró la historia clínica asociada a esta cita", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return -1; // Retorna -1 si no encuentra la historia clínica
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al obtener historia clínica: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return -1;
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error: Driver JDBC no encontrado", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        return -1;
     }
 }
         
@@ -164,7 +323,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
         jTFTelefonoContacto = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jTFApellidosContacto = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
+        jPAnamnesis = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -192,6 +351,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
+        jBEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -521,72 +681,83 @@ public class informacion_enfermero extends javax.swing.JFrame {
 
         jLabel30.setText("%");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jBEditar.setText("Editar");
+        jBEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEditarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPAnamnesisLayout = new javax.swing.GroupLayout(jPAnamnesis);
+        jPAnamnesis.setLayout(jPAnamnesisLayout);
+        jPAnamnesisLayout.setHorizontalGroup(
+            jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPAnamnesisLayout.createSequentialGroup()
                 .addGap(108, 108, 108)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
+                        .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
                             .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPAnamnesisLayout.createSequentialGroup()
+                                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPAnamnesisLayout.createSequentialGroup()
                                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(65, 65, 65)
                                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(281, 281, 281))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPAnamnesisLayout.createSequentialGroup()
+                                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jTFTemperatura, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTFPeso, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTFPresionSistolica, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTFEstatura))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                                     .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(64, 64, 64)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel20)
                                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(28, 28, 28)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jTFFrecuenciaCardiaca, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTFPresionDiastolica, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jTFOxigenacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                                         .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(22, 22, 22))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
+                        .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPAnamnesisLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBEditar)
+                .addGap(419, 419, 419))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jPAnamnesisLayout.setVerticalGroup(
+            jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPAnamnesisLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTFPresionSistolica, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
                     .addComponent(jTFPresionDiastolica, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -594,7 +765,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
                     .addComponent(jLabel22)
                     .addComponent(jLabel23))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(jTFPeso, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16)
@@ -602,7 +773,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
                     .addComponent(jLabel25)
                     .addComponent(jLabel29))
                 .addGap(19, 19, 19)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
                     .addComponent(jLabel20)
                     .addComponent(jTFOxigenacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -610,28 +781,30 @@ public class informacion_enfermero extends javax.swing.JFrame {
                     .addComponent(jLabel24)
                     .addComponent(jLabel30))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTFEstatura, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21)
                     .addComponent(jLabel28))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
                         .addGap(75, 75, 75)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
                         .addGap(95, 95, 95)
                         .addComponent(jLabel17)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPAnamnesisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPAnamnesisLayout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addComponent(jLabel19)))
-                .addContainerGap(734, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
+                .addComponent(jBEditar)
+                .addContainerGap(666, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Anamnesis", jPanel3);
+        jTabbedPane1.addTab("Anamnesis", jPAnamnesis);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -725,6 +898,26 @@ public class informacion_enfermero extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFNombresActionPerformed
 
+    private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
+        if (this.jBEditar.getText() ==  "Editar"){
+            this.jBEditar.setText("Finalizar");
+            this.jTFPresionSistolica.setEditable(true);
+            this.jTFPresionDiastolica.setEditable(true);
+            this.jTFPeso.setEditable(true);
+            this.jTFFrecuenciaCardiaca.setEditable(true);
+            this.jTFTemperatura.setEditable(true);
+            this.jTFOxigenacion.setEditable(true);
+            this.jTFEstatura.setEditable(true);
+            this.jTAExamenFisico.setEditable(true);
+            this.jTAMotivo.setEditable(true);
+            
+            JOptionPane.showMessageDialog(this, "Editar con precaución","Editar", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            this.jBEditar.setText("Editar");
+            actualizarAnamnesisYCita();
+        }
+    }//GEN-LAST:event_jBEditarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -751,6 +944,7 @@ public class informacion_enfermero extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBEditar;
     private javax.swing.JComboBox<String> jCBEstadoCivil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -782,9 +976,9 @@ public class informacion_enfermero extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPAnamnesis;
     private javax.swing.JPanel jPInformacionPaciente;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTAExamenFisico;

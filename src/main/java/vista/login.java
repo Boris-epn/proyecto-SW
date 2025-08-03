@@ -137,7 +137,7 @@ try (PreparedStatement stmt = conn.prepareStatement(enfermeroQuery)) {
             String apellidos = rs.getString("apellidos");
             
             JOptionPane.showMessageDialog(this, 
-                "Acceso concedido como enfermero: " + nombres + " " + apellidos,
+                "Acceso concedido como enfermero ",
                 "Autenticación exitosa", 
                 JOptionPane.INFORMATION_MESSAGE);
             

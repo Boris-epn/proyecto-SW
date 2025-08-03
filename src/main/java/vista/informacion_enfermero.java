@@ -6,12 +6,15 @@ package vista;
 
 import com.mycompany.prototipo1.CitaDAO;
 import com.mycompany.prototipo1.ConexionSQLServer;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -28,6 +31,8 @@ public class informacion_enfermero extends javax.swing.JFrame {
     /**
      * Creates new form informacion_enfermero
      */
+
+            
     public informacion_enfermero() {
         initComponents();
     }
@@ -281,6 +286,65 @@ private int obtenerIdHistoriaClinica(int idCita) {
         return -1;
     }
 }
+private void habilitarCamposEdicion(boolean habilitar) {
+    this.jTFPresionSistolica.setEditable(habilitar);
+    this.jTFPresionDiastolica.setEditable(habilitar);
+    this.jTFPeso.setEditable(habilitar);
+    this.jTFFrecuenciaCardiaca.setEditable(habilitar);
+    this.jTFTemperatura.setEditable(habilitar);
+    this.jTFOxigenacion.setEditable(habilitar);
+    this.jTFEstatura.setEditable(habilitar);
+    this.jTAExamenFisico.setEditable(habilitar);
+    this.jTAMotivo.setEditable(habilitar);
+}
+private boolean validarCamposAnamnesis() {
+    try {
+        // Validar campos numéricos
+        validarCampoNumerico(jTFPresionSistolica, "Presión sistólica");
+        validarCampoNumerico(jTFPresionDiastolica, "Presión diastólica");
+        validarCampoNumerico(jTFPeso, "Peso");
+        validarCampoNumerico(jTFEstatura, "Estatura");
+        validarCampoNumerico(jTFFrecuenciaCardiaca, "Frecuencia cardíaca");
+        validarCampoNumerico(jTFTemperatura, "Temperatura");
+        validarCampoNumerico(jTFOxigenacion, "Oxigenación");
+
+        // Validar campos de texto
+        if (jTAMotivo.getText().trim().isEmpty()) {
+            mostrarError("El motivo no puede estar vacío", jTAMotivo);
+            return false;
+        }
+        if (jTAExamenFisico.getText().trim().isEmpty()) {
+            mostrarError("El examen físico no puede estar vacío", jTAExamenFisico);
+            return false;
+        }
+
+        return true;
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+}
+private void validarCampoNumerico(JTextField campo, String nombreCampo) {
+    String texto = campo.getText().trim();
+    if (texto.isEmpty()) {
+        throw new NumberFormatException(nombreCampo + " no puede estar vacío");
+    }
+    try {
+        Double.parseDouble(texto); // Intenta convertir a número
+    } catch (NumberFormatException e) {
+        campo.setBackground(Color.PINK); // Resalta el campo erróneo
+        throw new NumberFormatException(nombreCampo + " debe ser un número válido");
+    }
+    campo.setBackground(Color.WHITE); // Restablece color si es válido
+}
+
+private void mostrarError(String mensaje, JComponent componente) {
+    JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    componente.requestFocus(); // Enfoca el campo problemático
+}
+
+
+
         
     
     
@@ -909,23 +973,21 @@ private int obtenerIdHistoriaClinica(int idCita) {
     }//GEN-LAST:event_jTFNombresActionPerformed
 
     private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
-        if (this.jBEditar.getText() ==  "Editar"){
-            this.jBEditar.setText("Finalizar");
-            this.jTFPresionSistolica.setEditable(true);
-            this.jTFPresionDiastolica.setEditable(true);
-            this.jTFPeso.setEditable(true);
-            this.jTFFrecuenciaCardiaca.setEditable(true);
-            this.jTFTemperatura.setEditable(true);
-            this.jTFOxigenacion.setEditable(true);
-            this.jTFEstatura.setEditable(true);
-            this.jTAExamenFisico.setEditable(true);
-            this.jTAMotivo.setEditable(true);
-            
-            JOptionPane.showMessageDialog(this, "Editar con precaución","Editar", JOptionPane.INFORMATION_MESSAGE);
-        }else{
-            this.jBEditar.setText("Editar");
-            actualizarAnamnesisYCita();
+         if (this.jBEditar.getText().equals("Editar")) {
+        // Modo edición
+        this.jBEditar.setText("Finalizar");
+        habilitarCamposEdicion(true);
+        JOptionPane.showMessageDialog(this, "Editar con precaución", "Editar", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        // Modo finalizar - validar antes de guardar
+        if (validarCamposAnamnesis()) {
+            if (actualizarAnamnesisYCita()) {
+                habilitarCamposEdicion(false);
+                this.jBEditar.setText("Editar");
+                JOptionPane.showMessageDialog(this, "Datos actualizados correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
+    }
     }//GEN-LAST:event_jBEditarActionPerformed
 
     /**

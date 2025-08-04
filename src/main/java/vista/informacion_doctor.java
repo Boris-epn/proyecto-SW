@@ -1374,9 +1374,18 @@ private void limpiarTablaAntecedentes() {
     }//GEN-LAST:event_jbbuscarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       // evolucion vistaEvolucion = new evolucion(this.id_cita);
+        //vistaEvolucion.setVisible(true);
+        
+        //cargarDatosDelPaciente();
         evolucion vistaEvolucion = new evolucion(this.id_cita);
+        vistaEvolucion.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e){
+                cargarDatosDelPaciente();
+            }
+        });
         vistaEvolucion.setVisible(true);
-        cargarDatosDelPaciente();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTFTemperaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFTemperaturaActionPerformed

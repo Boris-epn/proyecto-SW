@@ -308,7 +308,6 @@ private boolean validarCamposAnamnesis() {
         validarCampoNumerico(jTFTemperatura, "Temperatura");
         validarCampoNumerico(jTFOxigenacion, "Oxigenación");
 
-        // Validar campos de texto
         if (jTAMotivo.getText().trim().isEmpty()) {
             mostrarError("El motivo no puede estar vacío", jTAMotivo);
             return false;
@@ -330,12 +329,10 @@ private void validarCampoNumerico(JTextField campo, String nombreCampo) {
         throw new NumberFormatException(nombreCampo + " no puede estar vacío");
     }
     try {
-        Double.parseDouble(texto); // Intenta convertir a número
+        Double.parseDouble(texto); 
     } catch (NumberFormatException e) {
-        campo.setBackground(Color.PINK); // Resalta el campo erróneo
         throw new NumberFormatException(nombreCampo + " debe ser un número válido");
     }
-    campo.setBackground(Color.WHITE); // Restablece color si es válido
 }
 
 private void mostrarError(String mensaje, JComponent componente) {

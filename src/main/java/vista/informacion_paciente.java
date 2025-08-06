@@ -293,7 +293,7 @@ public class informacion_paciente extends javax.swing.JFrame {
             }
         });
 
-        jCBEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casado/a", "Divorciado/a", "Viduo/a", "Soltero/a" }));
+        jCBEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casado/a", "Divorciado/a", "Viduo/a", "Soltero/a", "Unión de hecho" }));
 
         jLabel27.setText("Estado civil");
 

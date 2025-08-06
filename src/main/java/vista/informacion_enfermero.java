@@ -498,7 +498,7 @@ private void mostrarError(String mensaje, JComponent componente) {
 
         jLabel27.setText("Estado civil");
 
-        jCBEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casado/a", "Divorciado/a", "Viduo/a", "Soltero/a" }));
+        jCBEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casado/a", "Divorciado/a", "Viduo/a", "Soltero/a", "Unión de hecho" }));
 
         jLabel8.setText("Teléfono");
 
